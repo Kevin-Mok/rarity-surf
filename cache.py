@@ -11,12 +11,20 @@ def cacheTokenMetadata(contract, startTokenNum, endTokenNum):
         tokenMetadata = getTokenMetadata(contract, tokenNum)
         with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
             print(f"Caching Token #{tokenNum} to {out.name}:")
-            pprint(tokenMetadata)
+            #  pprint(tokenMetadata)
             json.dump(tokenMetadata, out, indent=2)
 
 def getRawCacheFiles():
     return [file for file in os.listdir(RAW_CACHE_DIR) 
             if isfile(join(RAW_CACHE_DIR, file))]
+
+def createMasterJSON(contract, startTokenNum, endTokenNum):
+    master_json = {}
+    for tokenNum in range(startTokenNum, endTokenNum + 1):
+        tokenMetadata = getTokenMetadata(contract, tokenNum)
+        print(f"Adding Token #{tokenNum} metadata to master JSON.")
+        master_json[tokenNum] = tokenMetadata
+    return master_json
 
 def initMasterJSON():
     master_json = {}

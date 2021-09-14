@@ -7,6 +7,7 @@ from pprint import pprint
 if __name__ == "__main__":
     #  contract = getContract()
     #  cache.cacheTokenMetadata(contract, 1000, 1001)
+    #  pprint(cache.createMasterJSON(contract, 1, 50))
 
     #  pprint(cache.initMasterJSON())
     #  TODO: test new general cache fxns # 

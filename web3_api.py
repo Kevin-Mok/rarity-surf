@@ -8,12 +8,14 @@ import urllib.request
 ETHERSCAN_KEY = '2XEAQN2TAE7YABRYMR2HFEMCRXYUB9EDQC'
 WEB3_HTTP_PROVIDER = 'https://mainnet.infura.io/v3/a57b116ee7a845a2ba0ee902a5280911'
 INFURA_IPFS_PROJECT_ID = '1y5NJcmgstcJZ3CtveqhljSS3Tu'
-INFURA_IPFS_PROJECT_SECRET =                 'e02e9b9473b5e5198ba9be4400592182'
+INFURA_IPFS_PROJECT_SECRET = 'e02e9b9473b5e5198ba9be4400592182'
+SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
+
 
 def getABI():
     """Get ABI of contract using Etherscan's API.
     """
-    ABI_json = f"https://api.etherscan.io/api?module=contract&action=getabi&address={constants.SEVENS_CONTRACT_ADDRESS}&apikey=2XEAQN2TAE7YABRYMR2HFEMCRXYUB9EDQC"
+    ABI_json = f"https://api.etherscan.io/api?module=contract&action=getabi&address={SEVENS_CONTRACT_ADDRESS}&apikey={ETHERSCAN_KEY}"
     with urllib.request.urlopen(ABI_json) as url:
         data = json.loads(url.read().decode())
         return data["result"]
