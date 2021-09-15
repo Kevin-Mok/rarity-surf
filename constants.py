@@ -1,3 +1,5 @@
+SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
+
 CACHE_DIR = "./data/sevens"
 RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
 MASTER_JSON_FILE = f"{CACHE_DIR}/master.json"
