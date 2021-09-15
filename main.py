@@ -15,3 +15,5 @@ if __name__ == "__main__":
     #  cache.cache_json(cache.initMasterJSON(), MASTER_JSON_FILE)
     #  pprint(cache.readMasterJSON()["4629"])
     #  pprint(cache.read_json(MASTER_JSON_FILE)["4629"])
+
+    #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))

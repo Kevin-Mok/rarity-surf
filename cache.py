@@ -1,6 +1,8 @@
 from constants import CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
 from web3_api import getTokenMetadata
+from math import floor
 from pprint import pprint
+import threading
 
 import json 
 import os
@@ -24,6 +26,43 @@ def createMasterJSON(contract, startTokenNum, endTokenNum):
         tokenMetadata = getTokenMetadata(contract, tokenNum)
         print(f"Adding Token #{tokenNum} metadata to master JSON.")
         master_json[tokenNum] = tokenMetadata
+    return master_json
+
+def addTokensToMasterJSON(contract, master_json, startTokenNum,
+        endTokenNum):
+    for tokenNum in range(startTokenNum, endTokenNum + 1):
+        tokenMetadata = getTokenMetadata(contract, tokenNum)
+        print(f"Adding Token #{tokenNum} metadata to master JSON.")
+        master_json[tokenNum] = tokenMetadata
+
+def addTokensToMasterJSONThreaded(contract, master_json, startTokenNum,
+        endTokenNum, threadNum):
+    for tokenNum in range(startTokenNum, endTokenNum + 1):
+        tokenMetadata = getTokenMetadata(contract, tokenNum)
+        print(f"Thread #{threadNum}: Adding Token #{tokenNum} metadata to master JSON.")
+        master_json[tokenNum] = tokenMetadata
+
+def threadStepTest(threadNum, startTokenNum, endTokenNum):
+    print(f"Thread #{threadNum}: {startTokenNum}-{endTokenNum}")
+
+def createMasterJSONThreaded(contract, startTokenNum,
+        endTokenNum, threads):
+    master_json = {}
+    step = floor((endTokenNum - startTokenNum) / threads)
+    threadStartTokenNum = startTokenNum
+    #  for i in range(startTokenNum, endTokenNum, step):
+    for i in range(threads):
+        #  thread.start_new_thread(addTokensToMasterJSON,
+                #  (contract, master_json, startTokenNum, endTokenNum))
+        #  threading.Thread(target=threadStepTest,
+                #  args=(i, threadStartTokenNum,
+                    #  threadStartTokenNum + step)).start()
+        threading.Thread(target=addTokensToMasterJSONThreaded,
+                args=(contract, master_json,
+                    threadStartTokenNum,
+                    threadStartTokenNum + step, i)).start()
+        threadStartTokenNum += step + 1
+    #  addTokensToMasterJSON(contract, startTokenNum, endTokenNum)
     return master_json
 
 def initMasterJSON():
