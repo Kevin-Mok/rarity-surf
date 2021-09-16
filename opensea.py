@@ -38,6 +38,8 @@ def getSalesFileName(page):
     return f"{SALES_DIR}/os-sales-{page}.json"
 
 def cacheSalesData(page):
+    #  for i in range(11, 15):
+        #  cacheSalesData(i)
     cache.cache_json(getSalesData(page),
             getSalesFileName(page))
 
@@ -56,6 +58,10 @@ def getEth(eth):
 def filterSalesByPrice(sale_events, geThan):
     return [sale_event for sale_event in sale_events
             if getEth(sale_event["total_price"]) >= geThan]
+
+def filterSaleSummariesByPrice(sale_summaries, geThan):
+    return [sale_summaries[sale_id] for sale_id in sale_summaries
+            if sale_summaries[sale_id][ETH_KEY] >= geThan]
 
 def formatTimestamp(timestamp):
     # 2021-09-16T05:49:06
@@ -84,6 +90,13 @@ def printAllSales(all_sale_events, geThan):
         print(f"{txn_time} | #{token_id:4} = " + 
               f"{sale_price:4} ETH")
 
+def printAllSaleSummaries(all_sale_summaries, geThan=0):
+    for sale in filterSaleSummariesByPrice(
+            all_sale_summaries, geThan):
+        print(f"{formatTimestamp(sale[TIMESTAMP_KEY])} | " +
+              f"#{sale[TOKEN_ID_KEY]:4} = " + 
+              f"{sale[ETH_KEY]:4} ETH")
+
 def addSaleSummary(master_sale_summaries, sale):
     #  master_sale_summaries[sale["id"]] = {
     master_sale_summaries[str(sale["id"])] = {
@@ -108,6 +121,7 @@ def convertMasterSales():
     return master_sale_summaries
 
 def createMasterSaleEvents(max_page):
+    # createMasterSaleEvents(14)
     all_sale_events = {}
     for i in range(max_page + 1):
         sale_events = getEventsList(readSalesData(i))
@@ -116,6 +130,7 @@ def createMasterSaleEvents(max_page):
     return all_sale_events
 
 def updateMasterSaleEvents(max_page):
+    # all_sale_events = updateMasterSaleEvents(1)
     all_sale_events = cache.read_json(MASTER_SALES_FILE)
     print(f"Starting master sales: {len(all_sale_events)}")
     for i in range(max_page + 1):
@@ -145,26 +160,9 @@ def updateMasterSaleSummaries(max_page):
     return master_sale_summaries
 
 if __name__ == "__main__":
-    #  TODO: create separate raw dirs for metadata/sales # 
-    #  for i in range(11, 15):
-        #  cacheSalesData(i)
-    #  cacheSalesData(0)
+    #  TODO: cleanup raw sales code # 
 
-    #  all_sale_events = createMasterSaleEvents(14)
-    #  pprint(len(all_sale_events))
-    #  cache.cache_json(all_sale_events, MASTER_SALES_FILE)
-
-    #  TODO: write ETH limit sales to file # 
-    #  all_sale_events = cache.read_json(MASTER_SALES_FILE)
-    #  all_sale_events = updateMasterSaleEvents(1)
-    #  print(len(all_sale_events))
-    #  printAllSales(all_sale_events, 7)
-    #  pprint(all_sale_events["914642515"])
-
-    #  pprint(convertMasterSales())
-    #  cache.cache_json(convertMasterSales(),
-            #  MASTER_SALES_SUMMARY_FILE)
-    #  sale_summaries = cache.read_json(MASTER_SALES_SUMMARY_FILE)
-    #  cache.cache_json(sale_summaries, MASTER_SALES_SUMMARY_FILE)
-
-    sale_summaries = updateMasterSaleSummaries(0)
+    #  sale_summaries = updateMasterSaleSummaries(0)
+    sale_summaries = cache.read_json(MASTER_SALES_SUMMARY_FILE)
+    printAllSaleSummaries(sale_summaries, 1)
+    #  printAllSaleSummaries(sale_summaries)
