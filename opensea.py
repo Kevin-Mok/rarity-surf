@@ -7,6 +7,7 @@ import json
 import pdb
 from pprint import pprint
 import requests
+from sys import argv
 
 EVENTS_API = "https://api.opensea.io/api/v1/events"
 API_HEADERS = {"Accept": "application/json"}
@@ -93,8 +94,20 @@ def updateMasterSaleSummaries(max_page):
             MASTER_SALES_SUMMARY_FILE)
     return master_sale_summaries
 
+def getCachedSaleSummaries():
+    return cache.read_json(MASTER_SALES_SUMMARY_FILE)
+
 if __name__ == "__main__":
-    #  sale_summaries = updateMasterSaleSummaries(0)
-    sale_summaries = cache.read_json(MASTER_SALES_SUMMARY_FILE)
-    printAllSaleSummaries(sale_summaries, 1)
-    #  printAllSaleSummaries(sale_summaries)
+    """
+    options for argv[1]:
+    - "update"
+    - ETH to filter by
+    - none to print all
+    """
+    if len(argv) > 1:
+        if argv[1] == "update":
+            sale_summaries = updateMasterSaleSummaries(0)
+        else:
+            printAllSaleSummaries(getCachedSaleSummaries(), int(argv[1]))
+    else:
+        printAllSaleSummaries(getCachedSaleSummaries())
