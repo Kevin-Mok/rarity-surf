@@ -11,28 +11,31 @@ import requests
 EVENTS_API = "https://api.opensea.io/api/v1/events"
 API_HEADERS = {"Accept": "application/json"}
 EVENT_TYPE = "successful"
+MAX_LIMIT = 300
 
 MASTER_SALES_FILE = f"{constants.CACHE_DIR}/master-os-sales.json"
 
-def getSalesData(offset):
+def getSalesData(page):
     querystring = {
             "asset_contract_address": constants.SEVENS_CONTRACT_ADDRESS,
             "event_type": EVENT_TYPE,
-            "offset": offset,
-            "limit":"300"}
+            "offset": page * MAX_LIMIT,
+            "limit": MAX_LIMIT}
     api_request = requests.request("GET", EVENTS_API,
             headers=API_HEADERS, params=querystring)
     return json.loads(api_request.text)
 
-def getSalesFileName(offset):
-    return f"{constants.CACHE_DIR}/os-sales-{offset}.json"
+def getSalesFileName(page):
+    return f"{constants.CACHE_DIR}/os-sales-{page}.json"
 
-def cacheSalesData(sales_data, offset):
-    cache.cache_json(sales_data, getSalesFileName(offset))
+def cacheSalesData(page):
+    cache.cache_json(getSalesData(page),
+            getSalesFileName(page))
 
-def readSalesData(offset):
-    with open(getSalesFileName(offset)) as sales_data:
-        return json.load(sales_data)
+def readSalesData(page):
+    return cache.read_json(getSalesFileName(page))
+    #  with open(getSalesFileName(page)) as sales_data:
+        #  return json.load(sales_data)
 
 def getEventsList(json):
     return json["asset_events"]
@@ -56,9 +59,12 @@ def formatTimestamp(timestamp):
 def printAllSales(all_sale_events, geThan):
     all_sales = [all_sale_events[sale_id] 
             for sale_id in sorted(all_sale_events)
-            if all_sale_events[sale_id]["transaction"] is not None]
+            if all_sale_events[sale_id]["transaction"] is not None
+            and all_sale_events[sale_id]["asset"] is not None]
     for sale in filterSales(all_sales, geThan):
+        #  pprint(sale)
         txn_time = formatTimestamp(sale["transaction"]["timestamp"])
+        #  print(sale["asset"])
         token_id = sale["asset"]["token_id"]
         #  sale_price = getEth(sale["total_price"])
         sale_price = str(getEth(sale["total_price"]))
@@ -67,32 +73,31 @@ def printAllSales(all_sale_events, geThan):
               #  f"{sale_price:.2f} ETH")
               f"{sale_price:4} ETH")
 
-def createMasterSaleEvents(max_offet):
+def createMasterSaleEvents(max_page):
     all_sale_events = {}
-    for i in range(max_offet + 1):
+    for i in range(max_page + 1):
         sale_events = getEventsList(readSalesData(i))
+        first_id = sale_events[0]["id"]
         for sale in sale_events:
+            #  print(sale["id"])
+            #  pprint(sale)
             all_sale_events[sale["id"]] = sale
+            #  pprint(len(all_sale_events))
+        #  pprint(all_sale_events[sale["id"]])
+        #  pprint(all_sale_events[first_id])
     return all_sale_events
 
 if __name__ == "__main__":
-    #  offset = 0
-    #  cacheSalesData(getSalesData(offset), offset)
     #  TODO: create separate raw dirs for metadata/sales # 
-    #  cache.cache_json(getSalesData(offset), getSalesFileName(offset))
+    #  for i in range(11, 15):
+        #  cacheSalesData(i)
 
-    #  with open(getSalesFileName(10), 'w') as out:
-        #  json.dump(sale_events[0], out, indent=2)
-    #  for sale in filterSales(sale_events, 3):
-        #  print(getSaleSummary(sale))
-
-    #  all_sale_events = createMasterSaleEvents(1)
-    #  pprint(all_sale_events[921818069])
+    #  TODO: only save/store summary data # 
+    #  all_sale_events = createMasterSaleEvents(14)
     #  pprint(len(all_sale_events))
-    #  for sale_id in all_sale_events:
-        #  printSaleSummary(all_sale_events[sale_id])
-    #  printAllSales(all_sale_events, 3)
     #  cache.cache_json(all_sale_events, MASTER_SALES_FILE)
+
     all_sale_events = cache.read_json(MASTER_SALES_FILE)
     #  print(len(all_sale_events))
-    pprint(all_sale_events["914642515"])
+    printAllSales(all_sale_events, 3)
+    #  pprint(all_sale_events["914642515"])
