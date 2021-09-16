@@ -13,9 +13,11 @@ API_HEADERS = {"Accept": "application/json"}
 EVENT_TYPE = "successful"
 MAX_LIMIT = 300
 
-MASTER_SALES_FILE = f"{constants.CACHE_DIR}/master-os-sales.json"
+SALES_DIR = f"{constants.CACHE_DIR}/sales"
+MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
 
 def getSalesData(page):
+    print(f"Fetching page {page} of events.")
     querystring = {
             "asset_contract_address": constants.SEVENS_CONTRACT_ADDRESS,
             "event_type": EVENT_TYPE,
@@ -26,7 +28,7 @@ def getSalesData(page):
     return json.loads(api_request.text)
 
 def getSalesFileName(page):
-    return f"{constants.CACHE_DIR}/os-sales-{page}.json"
+    return f"{SALES_DIR}/os-sales-{page}.json"
 
 def cacheSalesData(page):
     cache.cache_json(getSalesData(page),
@@ -77,27 +79,36 @@ def createMasterSaleEvents(max_page):
     all_sale_events = {}
     for i in range(max_page + 1):
         sale_events = getEventsList(readSalesData(i))
-        first_id = sale_events[0]["id"]
         for sale in sale_events:
-            #  print(sale["id"])
-            #  pprint(sale)
             all_sale_events[sale["id"]] = sale
-            #  pprint(len(all_sale_events))
-        #  pprint(all_sale_events[sale["id"]])
-        #  pprint(all_sale_events[first_id])
+    return all_sale_events
+
+def updateMasterSaleEvents(max_page):
+    all_sale_events = cache.read_json(MASTER_SALES_FILE)
+    print(f"Starting master sales: {len(all_sale_events)}")
+    for i in range(max_page + 1):
+        new_sales = getEventsList(getSalesData(i))
+        for sale in new_sales:
+            all_sale_events[sale["id"]] = sale
+    print(f"Ending master sales: {len(all_sale_events)}")
+    cache.cache_json(all_sale_events, MASTER_SALES_FILE)
     return all_sale_events
 
 if __name__ == "__main__":
     #  TODO: create separate raw dirs for metadata/sales # 
     #  for i in range(11, 15):
         #  cacheSalesData(i)
+    #  cacheSalesData(0)
 
     #  TODO: only save/store summary data # 
     #  all_sale_events = createMasterSaleEvents(14)
     #  pprint(len(all_sale_events))
     #  cache.cache_json(all_sale_events, MASTER_SALES_FILE)
 
+    #  TODO: add new data to existing # 
+    #  TODO: write ETH limit sales to file # 
     all_sale_events = cache.read_json(MASTER_SALES_FILE)
+    #  all_sale_events = updateMasterSaleEvents(1)
     #  print(len(all_sale_events))
-    printAllSales(all_sale_events, 3)
+    #  printAllSales(all_sale_events, 7)
     #  pprint(all_sale_events["914642515"])
