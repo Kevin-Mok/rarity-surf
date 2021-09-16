@@ -25,13 +25,21 @@ def initMasterJSON():
             master_json[file_name.removesuffix('.json')] = json.load(json_file)
     return master_json
 
-def cacheMasterJSON(master_json):
-    with open(MASTER_JSON_FILE, 'w') as out:
-        json.dump(master_json, out, indent=2)
+#  def cacheMasterJSON(master_json):
+    #  with open(MASTER_JSON_FILE, 'w') as out:
+        #  json.dump(master_json, out, indent=2)
 
-def readMasterJSON():
-    with open(MASTER_JSON_FILE) as master_json:
-        return json.load(master_json)
+#  def readMasterJSON():
+    #  with open(MASTER_JSON_FILE) as master_json:
+        #  return json.load(master_json)
+
+def cache_json(json_to_cache, file_name):
+    with open(file_name, 'w') as out:
+        json.dump(json_to_cache, out, indent=2)
+
+def read_json(file_name):
+    with open(file_name) as in_file:
+        return json.load(in_file)
 
 def updateMasterJSON(master_json, tokenNum, tokenData):
     pass
