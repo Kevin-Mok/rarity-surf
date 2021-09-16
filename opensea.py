@@ -11,7 +11,8 @@ import requests
 EVENTS_API = "https://api.opensea.io/api/v1/events"
 API_HEADERS = {"Accept": "application/json"}
 EVENT_TYPE = "successful"
-MAX_LIMIT = 300
+#  MAX_LIMIT = 300
+MAX_LIMIT = 50
 
 SALES_DIR = f"{constants.CACHE_DIR}/sales"
 MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
@@ -83,17 +84,28 @@ def printAllSales(all_sale_events, geThan):
         print(f"{txn_time} | #{token_id:4} = " + 
               f"{sale_price:4} ETH")
 
+def addSaleSummary(master_sale_summaries, sale):
+    #  master_sale_summaries[sale["id"]] = {
+    master_sale_summaries[str(sale["id"])] = {
+            TIMESTAMP_KEY: sale["transaction"]["timestamp"],
+            TOKEN_ID_KEY: sale["asset"]["token_id"],
+            ETH_KEY: getEth(sale["total_price"])
+            }
+    return master_sale_summaries
+
 def convertMasterSales():
     all_sales = cache.read_json(MASTER_SALES_FILE)
     all_valid_sales = filterInvalidSales(all_sales)
-    master_sales_summary = {}
+    master_sale_summaries = {}
     for sale in all_valid_sales:
-        master_sales_summary[sale["id"]] = {
-                TIMESTAMP_KEY: sale["transaction"]["timestamp"],
-                TOKEN_ID_KEY: sale["asset"]["token_id"],
-                ETH_KEY: getEth(sale["total_price"])
-                }
-    return master_sales_summary
+        #  master_sale_summaries[sale["id"]] = {
+                #  TIMESTAMP_KEY: sale["transaction"]["timestamp"],
+                #  TOKEN_ID_KEY: sale["asset"]["token_id"],
+                #  ETH_KEY: getEth(sale["total_price"])
+                #  }
+        master_sale_summaries = addSaleSummary(
+                master_sale_summaries, sale)
+    return master_sale_summaries
 
 def createMasterSaleEvents(max_page):
     all_sale_events = {}
@@ -114,18 +126,34 @@ def updateMasterSaleEvents(max_page):
     cache.cache_json(all_sale_events, MASTER_SALES_FILE)
     return all_sale_events
 
+def updateMasterSaleSummaries(max_page):
+    master_sale_summaries = cache.read_json(
+            MASTER_SALES_SUMMARY_FILE)
+    starting_sale_summaries = len(master_sale_summaries)
+    print(f"Starting: {starting_sale_summaries}")
+    for i in range(max_page + 1):
+        new_sales = getEventsList(getSalesData(i))
+        for sale in new_sales:
+            master_sale_summaries = addSaleSummary(
+                    master_sale_summaries, sale)
+    added_sale_summaries = len(master_sale_summaries) -\
+            starting_sale_summaries
+    print(f"Added: {added_sale_summaries}")
+    print(f"Final: {len(master_sale_summaries)}")
+    cache.cache_json(master_sale_summaries,
+            MASTER_SALES_SUMMARY_FILE)
+    return master_sale_summaries
+
 if __name__ == "__main__":
     #  TODO: create separate raw dirs for metadata/sales # 
     #  for i in range(11, 15):
         #  cacheSalesData(i)
     #  cacheSalesData(0)
 
-    #  TODO: only save/store summary data # 
     #  all_sale_events = createMasterSaleEvents(14)
     #  pprint(len(all_sale_events))
     #  cache.cache_json(all_sale_events, MASTER_SALES_FILE)
 
-    #  TODO: add new data to existing # 
     #  TODO: write ETH limit sales to file # 
     #  all_sale_events = cache.read_json(MASTER_SALES_FILE)
     #  all_sale_events = updateMasterSaleEvents(1)
@@ -136,5 +164,7 @@ if __name__ == "__main__":
     #  pprint(convertMasterSales())
     #  cache.cache_json(convertMasterSales(),
             #  MASTER_SALES_SUMMARY_FILE)
-    cache.cache_json(cache.read_json(MASTER_SALES_SUMMARY_FILE),
-            MASTER_SALES_SUMMARY_FILE)
+    #  sale_summaries = cache.read_json(MASTER_SALES_SUMMARY_FILE)
+    #  cache.cache_json(sale_summaries, MASTER_SALES_SUMMARY_FILE)
+
+    sale_summaries = updateMasterSaleSummaries(0)
