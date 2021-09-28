@@ -11,9 +11,11 @@ from sys import argv
 
 EVENTS_API = "https://api.opensea.io/api/v1/events"
 API_HEADERS = {"Accept": "application/json"}
-EVENT_TYPE = "successful"
+#  EVENT_TYPE = "successful"
+EVENT_TYPE = "created"
 #  MAX_LIMIT = 300
-MAX_LIMIT = 50
+#  MAX_LIMIT = 50
+MAX_LIMIT = 5
 
 SALES_DIR = f"{constants.CACHE_DIR}/sales"
 MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
@@ -24,15 +26,21 @@ TIMESTAMP_KEY = "timestamp"
 TOKEN_ID_KEY = "token_id"
 ETH_KEY = "eth"
 
+ETH_FILTER = .4
+RANK_FILTER = 1000
+#  RANK_FILTER = 5000
+
 def getSalesData(page):
     print(f"Fetching page {page} of events.")
     querystring = {
-            "asset_contract_address": constants.SEVENS_CONTRACT_ADDRESS,
+            "asset_contract_address": constants.CONTRACT_ADDRESS,
             "event_type": EVENT_TYPE,
             "offset": page * MAX_LIMIT,
+            #  "auction_type": "dutch",
             "limit": MAX_LIMIT}
     api_request = requests.request("GET", EVENTS_API,
             headers=API_HEADERS, params=querystring)
+    #  pprint(api_request)
     return json.loads(api_request.text)
 
 def getEventsList(json):
@@ -97,6 +105,23 @@ def updateMasterSaleSummaries(max_page):
 def getCachedSaleSummaries():
     return cache.read_json(MASTER_SALES_SUMMARY_FILE)
 
+def getFilteredListings(listings):
+    ranks = cache.read_json(constants.RANKS_FILE)
+    filtered_listings = {}
+    for listing in listings:
+        eth = getEth(listing["starting_price"])
+        token_id = listing['asset']['token_id']
+        rank = ranks[token_id]['rank']
+        if (listing["auction_type"] == "dutch" and 
+                eth <= ETH_FILTER and
+                rank <= RANK_FILTER):
+            filtered_listings[rank] = {
+                    "token_id": token_id,
+                    "eth": eth,
+                    }
+    return filtered_listings
+    
+
 if __name__ == "__main__":
     """
     options for argv[1]:
@@ -104,10 +129,19 @@ if __name__ == "__main__":
     - ETH to filter by
     - none to print all
     """
-    if len(argv) > 1:
-        if argv[1] == "update":
-            sale_summaries = updateMasterSaleSummaries(0)
-        else:
-            printAllSaleSummaries(getCachedSaleSummaries(), int(argv[1]))
-    else:
-        printAllSaleSummaries(getCachedSaleSummaries())
+    #  if len(argv) > 1:
+        #  if argv[1] == "update":
+            #  sale_summaries = updateMasterSaleSummaries(0)
+        #  else:
+            #  printAllSaleSummaries(getCachedSaleSummaries(), int(argv[1]))
+    #  else:
+        #  printAllSaleSummaries(getCachedSaleSummaries())
+
+    # step 1
+    cache.cache_json(getSalesData(0), constants.LISTINGS_FILE)
+    #  pprint(getSalesData(0))
+
+    # step 2
+    #  listings = getEventsList(
+            #  cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
+    #  pprint(getFilteredListings(listings))

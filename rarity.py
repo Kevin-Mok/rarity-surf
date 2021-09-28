@@ -27,7 +27,6 @@ def incrTraitValue(trait_counts, attribute):
 def getTraitCounts(master_json):
     trait_counts = initTraitTypes(master_json)
     for token_json in master_json.values():
-        #  pprint(token_json)
         for attribute in token_json["attributes"]:
             incrTraitValue(trait_counts, attribute)
     return trait_counts
@@ -54,10 +53,8 @@ def calcTraitScores(master_json, trait_counts):
 def calcTokenScore(trait_scores, token_num):
     token_file = f"{constants.RAW_CACHE_DIR}/{token_num}.json"
     token_json = cache.read_json(token_file)
-    #  pprint(token_json)
     token_score = 0
     for attribute in token_json["attributes"]:
-        #  pprint(attribute)
         token_score += \
                 trait_scores[attribute["trait_type"]][attribute["value"]]
     return token_score
@@ -101,8 +98,8 @@ def calcAllTokenScores(master_json):
         image_ipfs_hash = web3_api.getIPFSHash(
                 master_json[token_id]["image"])
         os_url = f"{OS_ASSETS_URL}/{constants.CONTRACT_ADDRESS}/{token_id}", 
-        ranked_tokens[rank] = {
-                "id": token_id,
+        ranked_tokens[token_id] = {
+                "rank": rank,
                 "score": token_score[1],
                 "rarest_traits": rarest_token_traits,
                 "image_url": f"{IPFS_URL}/{image_ipfs_hash}",

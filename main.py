@@ -6,26 +6,23 @@ from pprint import pprint
 from web3_api import getContract, getIPFSHash, getTokenMetadata, getTokenURI
 
 if __name__ == "__main__":
-    contract = getContract()
+    #  contract = getContract()
     #  cache.cacheTokenMetadata(contract, 1000, 1001)
     #  pprint(cache.createMasterJSON(contract, 1, 50))
 
     # step 1
     #  cache.cacheTokenMetadataThreaded(1, 9575, 100)
-    cache.cacheTokenMetadataThreaded(1, 5, 1)
+    cache.cacheTokenMetadataThreaded(0, 5, 1)
 
     # step 2
-    #  cache.cache_json(cache.initMasterJSON(), MASTER_JSON_FILE)
+    #  cache.cache_json(cache.initMasterJSON(), constants.MASTER_JSON_FILE)
 
     # step 3
     #  master_json = cache.read_json(constants.MASTER_JSON_FILE)
     #  trait_counts = rarity.getTraitCounts(master_json)
-    #  rarest_traits = rarity.calcRarestTraits(master_json,
-            #  trait_counts)
-    #  cache.cache_json(rarest_traits,
-            #  constants.RARE_TRAITS_FILE)
-    #  cache.cache_json(
-            #  rarity.calcAllTokenScores(master_json),
+    #  rarest_traits = rarity.calcRarestTraits(master_json, trait_counts)
+    #  cache.cache_json(rarest_traits, constants.RARE_TRAITS_FILE)
+    #  cache.cache_json(rarity.calcAllTokenScores(master_json),
             #  constants.RANKS_FILE)
 
     #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))
