@@ -1,20 +1,39 @@
 from constants import CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
 from web3_api import getTokenMetadata
+
+import json 
 from math import floor
+import os
+from os.path import isfile, join, splitext
 from pprint import pprint
 import threading
 
-import json 
-import os
-from os.path import isfile, join, splitext
-
-def cacheTokenMetadata(contract, startTokenNum, endTokenNum):
+#  def cacheTokenMetadata(contract, startTokenNum, endTokenNum):
+def cacheTokenMetadata(startTokenNum, endTokenNum):
     for tokenNum in range(startTokenNum, endTokenNum + 1):
-        tokenMetadata = getTokenMetadata(contract, tokenNum)
+        #  tokenMetadata = getTokenMetadata(contract, tokenNum)
+        tokenMetadata = getTokenMetadata(tokenNum)
         with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
             print(f"Caching Token #{tokenNum} to {out.name}:")
             #  pprint(tokenMetadata)
             json.dump(tokenMetadata, out, indent=2)
+
+def cacheTokenMetadataThreadedHelper(startTokenNum, endTokenNum, threadNum):
+    for tokenNum in range(startTokenNum, endTokenNum + 1):
+        tokenMetadata = getTokenMetadata(tokenNum)
+        with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
+            print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
+            json.dump(tokenMetadata, out, indent=2)
+
+def cacheTokenMetadataThreaded(startTokenNum, endTokenNum, threads):
+    #  print(startTokenNum, endTokenNum, threads)
+    step = floor((endTokenNum - startTokenNum) / threads)
+    threadStartTokenNum = startTokenNum
+    for i in range(threads):
+        threading.Thread(target=cacheTokenMetadataThreadedHelper,
+                args=(threadStartTokenNum,
+                    threadStartTokenNum + step, i)).start()
+        threadStartTokenNum += step + 1
 
 def getRawCacheFiles():
     return [file for file in os.listdir(RAW_CACHE_DIR) 

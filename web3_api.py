@@ -1,16 +1,17 @@
 import constants
 
-from web3 import Web3
 import json 
 import requests
 import urllib.request
+from web3 import Web3
 
 ETHERSCAN_KEY = '2XEAQN2TAE7YABRYMR2HFEMCRXYUB9EDQC'
 WEB3_HTTP_PROVIDER = 'https://mainnet.infura.io/v3/a57b116ee7a845a2ba0ee902a5280911'
 INFURA_IPFS_PROJECT_ID = '1y5NJcmgstcJZ3CtveqhljSS3Tu'
 INFURA_IPFS_PROJECT_SECRET = 'e02e9b9473b5e5198ba9be4400592182'
-SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 
+SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
+SEVENS_IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 
 def getABI():
     """Get ABI of contract using Etherscan's API.
@@ -31,9 +32,12 @@ def getTokenURI(contract, tokenId):
     """
     return contract.functions.tokenURI(tokenId).call()
 
-def getTokenMetadata(contract, tokenNum):
-    ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
-    return json.loads(getIPFSResponse(ipfsHash).text)
+#  def getTokenMetadata(contract, tokenNum):
+def getTokenMetadata(tokenNum):
+    #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
+    #  return json.loads(getIPFSResponse(ipfsHash).text)
+    return json.loads(
+            getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
 
 def getIPFSHash(ipfsURL):
     return ipfsURL.removeprefix('ipfs://')

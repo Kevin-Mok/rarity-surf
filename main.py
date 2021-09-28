@@ -8,6 +8,7 @@ if __name__ == "__main__":
     #  contract = getContract()
     #  cache.cacheTokenMetadata(contract, 1000, 1001)
     #  pprint(cache.createMasterJSON(contract, 1, 50))
+    #  cache.cacheTokenMetadataThreaded(6997, 7000, 1)
 
     #  pprint(cache.initMasterJSON())
     #  TODO: test new general cache fxns # 
@@ -15,5 +16,6 @@ if __name__ == "__main__":
     #  cache.cache_json(cache.initMasterJSON(), MASTER_JSON_FILE)
     #  pprint(cache.readMasterJSON()["4629"])
     #  pprint(cache.read_json(MASTER_JSON_FILE)["4629"])
+    master_json = cache.readMasterJSON()
 
     #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))
