@@ -1,5 +1,5 @@
 import cache
-from constants import MASTER_JSON_FILE
+from constants import MASTER_JSON_FILE, RANKS_FILE
 import rarity
 
 from pprint import pprint
@@ -19,6 +19,12 @@ if __name__ == "__main__":
     master_json = cache.read_json(MASTER_JSON_FILE)
     trait_counts = rarity.getTraitCounts(master_json)
     #  pprint(trait_counts)
-    pprint(rarity.calcRarestTraits(master_json, trait_counts))
+    #  pprint(rarity.calcRarestTraits(master_json, trait_counts))
+    #  pprint(rarity.calcTraitScores(master_json, trait_counts))
+    trait_scores = rarity.calcTraitScores(master_json, trait_counts)
+    #  pprint(rarity.calcTokenScore(trait_scores, 4997))
+    #  pprint(rarity.calcAllTokenScores(trait_scores))
+    cache.cache_json(
+            rarity.calcAllTokenScores(trait_scores), RANKS_FILE)
 
     #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))
