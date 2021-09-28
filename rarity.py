@@ -3,7 +3,10 @@ import constants
 
 from pprint import pprint
 
-SEVENS_SUPPLY = 7000
+# 7s
+#  MAX_SUPPLY = 7000
+# uwucrew
+MAX_SUPPLY = 9670
 
 def initTraitTypes(master_json):
     trait_counts = {}
@@ -31,15 +34,19 @@ def calcRarestTraits(master_json, trait_counts):
     for trait_type in trait_counts:
         for trait in trait_counts[trait_type]:
             trait_percentages[trait_type][trait] = \
-                    trait_counts[trait_type][trait] / SEVENS_SUPPLY
+                    trait_counts[trait_type][trait] / MAX_SUPPLY
     return trait_percentages
+
+def calcTraitScore(trait_count):
+    return 1 / trait_count / MAX_SUPPLY * (10 ** 8)
 
 def calcTraitScores(master_json, trait_counts):
     trait_scores = initTraitTypes(master_json)
     for trait_type in trait_counts:
         for trait in trait_counts[trait_type]:
             trait_scores[trait_type][trait] = \
-                    1 / trait_counts[trait_type][trait] / SEVENS_SUPPLY
+                    calcTraitScore(trait_counts[trait_type][trait])
+                    #  1 / trait_counts[trait_type][trait] / MAX_SUPPLY
     return trait_scores
 
 def calcTokenScore(trait_scores, token_num):
@@ -55,7 +62,7 @@ def calcTokenScore(trait_scores, token_num):
 
 def calcAllTokenScores(trait_scores):
     token_scores = {}
-    for i in range(SEVENS_SUPPLY):
+    for i in range(MAX_SUPPLY):
         #  print(f"#{i}: {calcTokenScore(trait_scores, i)}")
         token_scores[i] = calcTokenScore(trait_scores, i)
     sorted_token_scores = sorted(

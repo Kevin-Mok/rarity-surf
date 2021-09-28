@@ -2,7 +2,7 @@ import constants
 
 import json 
 import requests
-import urllib.request
+from urllib.request import Request, urlopen
 from web3 import Web3
 
 ETHERSCAN_KEY = '2XEAQN2TAE7YABRYMR2HFEMCRXYUB9EDQC'
@@ -12,12 +12,14 @@ INFURA_IPFS_PROJECT_SECRET = 'e02e9b9473b5e5198ba9be4400592182'
 
 SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 SEVENS_IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
+API_URL = "https://api.uwucrew.art/api/uwu"
+REQUEST_HEADERS = {'User-Agent': 'Mozilla/5.0'}
 
 def getABI():
     """Get ABI of contract using Etherscan's API.
     """
     ABI_json = f"https://api.etherscan.io/api?module=contract&action=getabi&address={SEVENS_CONTRACT_ADDRESS}&apikey={ETHERSCAN_KEY}"
-    with urllib.request.urlopen(ABI_json) as url:
+    with urlopen(ABI_json) as url:
         data = json.loads(url.read().decode())
         return data["result"]
 
@@ -36,8 +38,12 @@ def getTokenURI(contract, tokenId):
 def getTokenMetadata(tokenNum):
     #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
     #  return json.loads(getIPFSResponse(ipfsHash).text)
-    return json.loads(
-            getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
+    #  return json.loads(
+            #  getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
+    #  return json.loads((f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
+
+    req = Request(f"{API_URL}/{tokenNum}", headers=REQUEST_HEADERS)
+    return json.loads(urlopen(req).read().decode())
 
 def getIPFSHash(ipfsURL):
     return ipfsURL.removeprefix('ipfs://')

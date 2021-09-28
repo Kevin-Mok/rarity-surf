@@ -1,0 +1,4 @@
+- Etherscan contract
+- IPFS
+- listed as upcoming on Rarity Sniper/Tools
+- good art to hold if flipping fails
