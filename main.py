@@ -3,10 +3,14 @@ import constants
 import rarity
 
 from pprint import pprint
-from web3_api import getContract, getTokenMetadata
+from web3_api import getContract, getIPFSHash, getTokenMetadata, getTokenURI
 
 if __name__ == "__main__":
-    #  contract = getContract()
+    contract = getContract()
+    #  tokenURI = getIPFSHash(getTokenURI(contract, 5))[:-2]
+    #  print(tokenURI)
+    #  print(not tokenURI.endswith("Fz6"))
+    #  print(tokenURI.endswith("Fz6"))
     #  cache.cacheTokenMetadata(contract, 1000, 1001)
     #  pprint(cache.createMasterJSON(contract, 1, 50))
     #  cache.cacheTokenMetadataThreaded(0, 100, 50)
@@ -19,7 +23,7 @@ if __name__ == "__main__":
     #  cache.cache_json(cache.initMasterJSON(), MASTER_JSON_FILE)
     #  pprint(cache.read_json(MASTER_JSON_FILE)["4629"])
 
-    master_json = cache.read_json(constants.MASTER_JSON_FILE)
+    #  master_json = cache.read_json(constants.MASTER_JSON_FILE)
     #  pprint(master_json["1353"])
     #  trait_counts = rarity.getTraitCounts(master_json)
     #  rarest_traits = rarity.calcRarestTraits(master_json,
@@ -35,9 +39,9 @@ if __name__ == "__main__":
     #  cache.cache_json(
             #  rarity.calcAllTokenScores(master_json,
                 #  trait_scores, rarest_traits), RANKS_FILE)
-    cache.cache_json(
-            rarity.calcAllTokenScores(master_json),
-            constants.RANKS_FILE)
+    #  cache.cache_json(
+            #  rarity.calcAllTokenScores(master_json),
+            #  constants.RANKS_FILE)
     #  rarity.getRarestAttributes(rarest_traits,
             #  master_json["0"]["attributes"])
 
