@@ -4,9 +4,9 @@ import constants
 from pprint import pprint
 
 # 7s
-#  MAX_SUPPLY = 7000
+MAX_SUPPLY = 7000
 # uwucrew
-MAX_SUPPLY = 9670
+#  MAX_SUPPLY = 9670
 
 def initTraitTypes(master_json):
     trait_counts = {}
@@ -46,7 +46,6 @@ def calcTraitScores(master_json, trait_counts):
         for trait in trait_counts[trait_type]:
             trait_scores[trait_type][trait] = \
                     calcTraitScore(trait_counts[trait_type][trait])
-                    #  1 / trait_counts[trait_type][trait] / MAX_SUPPLY
     return trait_scores
 
 def calcTokenScore(trait_scores, token_num):
@@ -60,10 +59,32 @@ def calcTokenScore(trait_scores, token_num):
                 trait_scores[attribute["trait_type"]][attribute["value"]]
     return token_score
 
-def calcAllTokenScores(trait_scores):
+def formatPercentage(percentage):
+    return f"{percentage * 100:.1f}%"
+
+def getRarestAttributes(rarest_traits, attributes):
+    attribute_rarities = []
+    for attribute in attributes:
+        rarity_percentage = rarest_traits[attribute["trait_type"]][attribute["value"]]
+        attribute_rarities.append({
+                "trait_type": attribute["trait_type"],
+                "trait": attribute["value"],
+                "rarity": rarity_percentage,
+                })
+
+    sorted_attribute_rarities = sorted(attribute_rarities,
+            key=lambda x: x["rarity"])
+    for attribute in sorted_attribute_rarities:
+        attribute["rarity"] = formatPercentage(attribute["rarity"])
+    return sorted_attribute_rarities[:3]
+
+def calcAllTokenScores(master_json):
+    trait_counts = getTraitCounts(master_json)
+    rarest_traits = calcRarestTraits(master_json, trait_counts)
+    trait_scores = calcTraitScores(master_json, trait_counts)
     token_scores = {}
+
     for i in range(MAX_SUPPLY):
-        #  print(f"#{i}: {calcTokenScore(trait_scores, i)}")
         token_scores[i] = calcTokenScore(trait_scores, i)
     sorted_token_scores = sorted(
             token_scores.items(), key=lambda x: x[1], reverse=True)
@@ -71,7 +92,13 @@ def calcAllTokenScores(trait_scores):
     ranked_tokens = {}
     rank = 1
     for token_score in sorted_token_scores:
-        ranked_tokens[rank] = token_score[0]
-        #  print(f"{rank}: #{token_num}")
+        token_id = token_score[0]
+        rarest_token_traits = getRarestAttributes(rarest_traits,
+                master_json[str(token_id)]["attributes"])
+        ranked_tokens[rank] = {
+                "id": token_id,
+                "score": token_score[1],
+                "rarest_traits": rarest_token_traits,
+                }
         rank += 1
     return ranked_tokens

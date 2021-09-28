@@ -38,12 +38,11 @@ def getTokenURI(contract, tokenId):
 def getTokenMetadata(tokenNum):
     #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
     #  return json.loads(getIPFSResponse(ipfsHash).text)
-    #  return json.loads(
-            #  getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
-    #  return json.loads((f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
+    return json.loads(
+            getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
 
-    req = Request(f"{API_URL}/{tokenNum}", headers=REQUEST_HEADERS)
-    return json.loads(urlopen(req).read().decode())
+    #  req = Request(f"{API_URL}/{tokenNum}", headers=REQUEST_HEADERS)
+    #  return json.loads(urlopen(req).read().decode())
 
 def getIPFSHash(ipfsURL):
     return ipfsURL.removeprefix('ipfs://')
