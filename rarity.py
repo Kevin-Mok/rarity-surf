@@ -1,8 +1,11 @@
 import cache
 import constants
+import web3_api
 
 from pprint import pprint
 
+IPFS_URL = "https://ipfs.io/ipfs"
+OS_ASSETS_URL = "https://opensea.io/assets"
 # 7s
 MAX_SUPPLY = 7000
 # uwucrew
@@ -92,13 +95,18 @@ def calcAllTokenScores(master_json):
     ranked_tokens = {}
     rank = 1
     for token_score in sorted_token_scores:
-        token_id = token_score[0]
+        token_id = str(token_score[0])
         rarest_token_traits = getRarestAttributes(rarest_traits,
-                master_json[str(token_id)]["attributes"])
+                master_json[token_id]["attributes"])
+        image_ipfs_hash = web3_api.getIPFSHash(
+                master_json[token_id]["image"])
+        os_url = f"{OS_ASSETS_URL}/{constants.CONTRACT_ADDRESS}/{token_id}", 
         ranked_tokens[rank] = {
                 "id": token_id,
                 "score": token_score[1],
                 "rarest_traits": rarest_token_traits,
+                "image_url": f"{IPFS_URL}/{image_ipfs_hash}",
+                "os_url": os_url,
                 }
         rank += 1
     return ranked_tokens

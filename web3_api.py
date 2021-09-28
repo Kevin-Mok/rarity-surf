@@ -10,15 +10,13 @@ WEB3_HTTP_PROVIDER = 'https://mainnet.infura.io/v3/a57b116ee7a845a2ba0ee902a5280
 INFURA_IPFS_PROJECT_ID = '1y5NJcmgstcJZ3CtveqhljSS3Tu'
 INFURA_IPFS_PROJECT_SECRET = 'e02e9b9473b5e5198ba9be4400592182'
 
-SEVENS_CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
-SEVENS_IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 API_URL = "https://api.uwucrew.art/api/uwu"
 REQUEST_HEADERS = {'User-Agent': 'Mozilla/5.0'}
 
 def getABI():
     """Get ABI of contract using Etherscan's API.
     """
-    ABI_json = f"https://api.etherscan.io/api?module=contract&action=getabi&address={SEVENS_CONTRACT_ADDRESS}&apikey={ETHERSCAN_KEY}"
+    ABI_json = f"https://api.etherscan.io/api?module=contract&action=getabi&address={constants.CONTRACT_ADDRESS}&apikey={ETHERSCAN_KEY}"
     with urlopen(ABI_json) as url:
         data = json.loads(url.read().decode())
         return data["result"]
@@ -26,7 +24,7 @@ def getABI():
 def getContract():
     w3 = Web3(Web3.HTTPProvider(WEB3_HTTP_PROVIDER))
     return w3.eth.contract(
-            Web3.toChecksumAddress(constants.SEVENS_CONTRACT_ADDRESS),
+            Web3.toChecksumAddress(constants.CONTRACT_ADDRESS),
             abi=getABI())
 
 def getTokenURI(contract, tokenId):
@@ -39,7 +37,7 @@ def getTokenMetadata(tokenNum):
     #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
     #  return json.loads(getIPFSResponse(ipfsHash).text)
     return json.loads(
-            getIPFSResponse(f"{SEVENS_IPFS_HASH}/{tokenNum}").text)
+            getIPFSResponse(f"{constants.IPFS_HASH}/{tokenNum}").text)
 
     #  req = Request(f"{API_URL}/{tokenNum}", headers=REQUEST_HEADERS)
     #  return json.loads(urlopen(req).read().decode())
