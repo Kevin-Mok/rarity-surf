@@ -1,8 +1,9 @@
 import cache
 from constants import MASTER_JSON_FILE
-from web3_api import getContract
+import rarity
 
 from pprint import pprint
+from web3_api import getContract
 
 if __name__ == "__main__":
     #  contract = getContract()
@@ -14,8 +15,10 @@ if __name__ == "__main__":
     #  TODO: test new general cache fxns # 
     #  cache.cacheMasterJSON(cache.initMasterJSON())
     #  cache.cache_json(cache.initMasterJSON(), MASTER_JSON_FILE)
-    #  pprint(cache.readMasterJSON()["4629"])
     #  pprint(cache.read_json(MASTER_JSON_FILE)["4629"])
-    master_json = cache.readMasterJSON()
+    master_json = cache.read_json(MASTER_JSON_FILE)
+    trait_counts = rarity.getTraitCounts(master_json)
+    #  pprint(trait_counts)
+    pprint(rarity.calcRarestTraits(master_json, trait_counts))
 
     #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))
