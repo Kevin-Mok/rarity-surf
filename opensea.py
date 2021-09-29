@@ -201,20 +201,12 @@ def getRefilteredListings():
     filtered_listings = checkIfStillListed(filtered_listings)
     ranks = cache.read_json(constants.RANKS_FILE)
 
-    #  pprint(filtered_listings)
     filtered_listings_info = {}
     for token_id in filtered_listings.keys():
-        #  token_id = filtered_listings[rank][TOKEN_ID_KEY]
         rank = filtered_listings[token_id][RANK_KEY]
-        #  pprint(filtered_listings[token_id])
-        #  pprint(ranks[token_id])
         filtered_listings_info[rank] = (filtered_listings[token_id] |
                 ranks[token_id])
         filtered_listings_info[rank].pop(RANK_KEY)
-    #  cache.cache_json(filtered_listings, constants.FILTERED_LISTINGS_FILE)
-    #  cache.cache_json(sortListingsByRank(listed),
-            #  constants.FILTERED_LISTINGS_FILE)
-    #  return listed
     return filtered_listings_info
 
 if __name__ == "__main__":
@@ -247,24 +239,4 @@ if __name__ == "__main__":
         #  constants.LISTINGS_FILE)
 
     # step 3: filter listings
-    #  listings = cache.read_json(constants.LISTINGS_FILE)
-    #  filtered_listings = getFilteredListings(listings)
-    #  pprint(sortListingsByRank(filtered_listings))
-    #  listed = checkIfStillListed(filtered_listings)
-    #  pprint(sortListingsByRank(listed))
-    #  cache.cache_json(sortListingsByRank(listed),
-            #  constants.FILTERED_LISTINGS_FILE)
-    #  pprint(getRefilteredListings())
-
-    # step 4: append rank info
-    #  listings = cache.read_json(constants.LISTINGS_FILE)
-    #  filtered_listings = cache.read_json(constants.FILTERED_LISTINGS_FILE)
-    #  ranks = cache.read_json(constants.RANKS_FILE)
-    #  for rank in filtered_listings.keys():
-        #  token_id = filtered_listings[rank][TOKEN_ID_KEY]
-        #  filtered_listings[rank] = (filtered_listings[rank] |
-                #  ranks[token_id])
-        #  filtered_listings[rank].pop("rank")
-    #  cache.cache_json(filtered_listings, constants.FILTERED_LISTINGS_FILE)
-    #  pprint(getRefilteredListings())
     cache.cache_json(getRefilteredListings(), constants.FILTERED_LISTINGS_FILE)
