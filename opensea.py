@@ -14,8 +14,8 @@ API_HEADERS = {"Accept": "application/json"}
 #  EVENT_TYPE = "successful"
 EVENT_TYPE = "created"
 #  MAX_LIMIT = 300
-#  MAX_LIMIT = 50
-MAX_LIMIT = 5
+MAX_LIMIT = 50
+#  MAX_LIMIT = 5
 
 SALES_DIR = f"{constants.CACHE_DIR}/sales"
 MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
@@ -25,10 +25,6 @@ MASTER_SALES_SUMMARY_FILE = f"{SALES_DIR}/master-os-sales-summary.json"
 TIMESTAMP_KEY = "timestamp"
 TOKEN_ID_KEY = "token_id"
 ETH_KEY = "eth"
-
-ETH_FILTER = .4
-RANK_FILTER = 1000
-#  RANK_FILTER = 5000
 
 def getSalesData(page):
     print(f"Fetching page {page} of events.")
@@ -113,8 +109,8 @@ def getFilteredListings(listings):
         token_id = listing['asset']['token_id']
         rank = ranks[token_id]['rank']
         if (listing["auction_type"] == "dutch" and 
-                eth <= ETH_FILTER and
-                rank <= RANK_FILTER):
+                eth <= constants.ETH_FILTER and
+                rank <= constants.RANK_FILTER):
             filtered_listings[rank] = {
                     "token_id": token_id,
                     "eth": eth,
@@ -123,6 +119,7 @@ def getFilteredListings(listings):
     
 
 if __name__ == "__main__":
+    # sales
     """
     options for argv[1]:
     - "update"
@@ -137,11 +134,11 @@ if __name__ == "__main__":
     #  else:
         #  printAllSaleSummaries(getCachedSaleSummaries())
 
+    # listings 
     # step 1
     cache.cache_json(getSalesData(0), constants.LISTINGS_FILE)
-    #  pprint(getSalesData(0))
 
     # step 2
-    #  listings = getEventsList(
-            #  cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
-    #  pprint(getFilteredListings(listings))
+    listings = getEventsList(
+            cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
+    pprint(getFilteredListings(listings))

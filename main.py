@@ -1,5 +1,6 @@
 import cache
 import constants
+from math import ceil 
 import rarity
 
 from pprint import pprint
@@ -13,10 +14,9 @@ if __name__ == "__main__":
 
     # step 1
     #  cache.cacheTokenMetadataThreaded(0, 5, 1)
-    # hearts
-    #  cache.cacheTokenMetadataThreaded(1, 9575, 100)
-    # seals
-    cache.cacheTokenMetadataThreaded(1, 1000, 10)
+
+    #  threads = ceil(constants.MAX_SUPPLY / 25)
+    #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
 
     # step 2
     #  cache.cache_json(cache.initMasterJSON(), constants.MASTER_JSON_FILE)

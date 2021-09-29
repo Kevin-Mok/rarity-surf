@@ -6,10 +6,6 @@ from pprint import pprint
 
 IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
-# 7s
-MAX_SUPPLY = 7000
-# uwucrew
-#  MAX_SUPPLY = 9670
 
 def initTraitTypes(master_json):
     trait_counts = {}
@@ -36,11 +32,11 @@ def calcRarestTraits(master_json, trait_counts):
     for trait_type in trait_counts:
         for trait in trait_counts[trait_type]:
             trait_percentages[trait_type][trait] = \
-                    trait_counts[trait_type][trait] / MAX_SUPPLY
+                    trait_counts[trait_type][trait] / constants.MAX_SUPPLY
     return trait_percentages
 
 def calcTraitScore(trait_count):
-    return 1 / trait_count / MAX_SUPPLY * (10 ** 8)
+    return 1 / trait_count / constants.MAX_SUPPLY * (10 ** 8)
 
 def calcTraitScores(master_json, trait_counts):
     trait_scores = initTraitTypes(master_json)
@@ -50,11 +46,9 @@ def calcTraitScores(master_json, trait_counts):
                     calcTraitScore(trait_counts[trait_type][trait])
     return trait_scores
 
-def calcTokenScore(trait_scores, token_num):
-    token_file = f"{constants.RAW_CACHE_DIR}/{token_num}.json"
-    token_json = cache.read_json(token_file)
+def calcTokenScore(master_json, trait_scores, token_num):
     token_score = 0
-    for attribute in token_json["attributes"]:
+    for attribute in master_json[token_num]["attributes"]:
         token_score += \
                 trait_scores[attribute["trait_type"]][attribute["value"]]
     return token_score
@@ -84,8 +78,9 @@ def calcAllTokenScores(master_json):
     trait_scores = calcTraitScores(master_json, trait_counts)
     token_scores = {}
 
-    for i in range(MAX_SUPPLY):
-        token_scores[i] = calcTokenScore(trait_scores, i)
+    for token_id in master_json.keys():
+        token_scores[token_id] = calcTokenScore(master_json,
+                trait_scores, token_id)
     sorted_token_scores = sorted(
             token_scores.items(), key=lambda x: x[1], reverse=True)
 
