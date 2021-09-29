@@ -3,6 +3,9 @@
 CACHE_DIR = "./data/seals"
 #  CACHE_DIR = "./data/hearts"
 RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
+
+# file names
+ASSETS_FILE = f"{CACHE_DIR}/assets.json"
 LISTINGS_FILE = f"{CACHE_DIR}/listings.json"
 MASTER_JSON_FILE = f"{CACHE_DIR}/master.json"
 RANKS_FILE = f"{CACHE_DIR}/ranks.json"
