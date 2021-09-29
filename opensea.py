@@ -88,11 +88,14 @@ def printAllSaleSummaries(all_sale_summaries, geThan=0):
               f"#{sale[TOKEN_ID_KEY]:4} = " + 
               f"{sale[ETH_KEY]:4} ETH")
 
+def getTokenIDFromObj(obj):
+    return obj["asset"]["token_id"]
+
 def addSaleSummary(master_sale_summaries, sale):
-    #  master_sale_summaries[sale["id"]] = {
     master_sale_summaries[str(sale["id"])] = {
             TIMESTAMP_KEY: sale["transaction"]["timestamp"],
-            TOKEN_ID_KEY: sale["asset"]["token_id"],
+            #  TOKEN_ID_KEY: sale["asset"]["token_id"],
+            TOKEN_ID_KEY: getTokenIDFromObj(sale),
             ETH_KEY: getEth(sale["total_price"])
             }
     return master_sale_summaries
@@ -165,12 +168,24 @@ def sortListingsByRank(listings):
     return ranked_listings
 
 def createMasterListings():
-    pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
+    #  pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
+    pages = 1
     master_listings = {}
     for page in range(pages):
         page_listings = getEventsList(getSalesData(page))
         for listing in page_listings:
             master_listings[listing["id"]] = listing
+    return master_listings
+
+def updateMasterListings(start_page, end_page):
+    master_listings = cache.read_json(constants.LISTINGS_FILE)
+    print(f"Starting listings: {len(master_listings)}")
+    for page in range(start_page, end_page + 1):
+        page_listings = getEventsList(getSalesData(page))
+        for listing in page_listings:
+            master_listings[str(listing["id"])] = listing
+    print(f"Ending listings: {len(master_listings)}")
+    cache.cache_json(master_listings, constants.LISTINGS_FILE)
     return master_listings
 
 if __name__ == "__main__":
@@ -190,11 +205,18 @@ if __name__ == "__main__":
         #  printAllSaleSummaries(getCachedSaleSummaries())
 
     # listings 
-    # step 1
-    #  cache.cache_json(createMasterListings(), constants.LISTINGS_FILE)
+    # step 1: create initial listings
+    cache.cache_json(createMasterListings(), constants.LISTINGS_FILE)
 
-    # step 2
-    listings = cache.read_json(constants.LISTINGS_FILE)
-    filtered_listings = getFilteredListings(listings)
-    listed = checkIfStillListed(filtered_listings)
-    pprint(sortListingsByRank(listed))
+    # step 2: update listings
+    #  pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
+    #  #  pages = 1
+    #  updateMasterListings(pages)
+    #  updateMasterListings(10, 12)
+
+    # step 3: filter listings
+    #  listings = cache.read_json(constants.LISTINGS_FILE)
+    #  filtered_listings = getFilteredListings(listings)
+    #  #  pprint(sortListingsByRank(filtered_listings))
+    #  listed = checkIfStillListed(filtered_listings)
+    #  pprint(sortListingsByRank(listed))

@@ -13,4 +13,4 @@ if __name__ == "__main__":
     token_uri = getTokenURI(contract, TOKEN_NUM)  
     ipfs_hash = getIPFSHash(token_uri)[-5:-2]
     print(ipfs_hash)
-    print(not token_uri != UNREVEALED_URI)
+    print(token_uri != UNREVEALED_URI)
