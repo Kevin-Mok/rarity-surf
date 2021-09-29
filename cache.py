@@ -18,26 +18,32 @@ def cacheTokenMetadata(startTokenNum, endTokenNum):
             #  pprint(tokenMetadata)
             json.dump(tokenMetadata, out, indent=2)
 
-def cacheTokenMetadataThreadedHelper(startTokenNum, endTokenNum, threadNum):
+def cacheTokenMetadataThreadedHelper(cached_tokens, startTokenNum, endTokenNum, threadNum):
     for tokenNum in range(startTokenNum, endTokenNum + 1):
-        tokenMetadata = getTokenMetadata(tokenNum)
-        with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
-            print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
-            json.dump(tokenMetadata, out, indent=2)
+        if str(tokenNum) not in cached_tokens:
+            tokenMetadata = getTokenMetadata(tokenNum)
+            with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
+                print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
+                json.dump(tokenMetadata, out, indent=2)
 
 def cacheTokenMetadataThreaded(startTokenNum, endTokenNum, threads):
     #  print(startTokenNum, endTokenNum, threads)
+    cached_tokens = getCachedTokens()
     step = floor((endTokenNum - startTokenNum) / threads)
     threadStartTokenNum = startTokenNum
     for i in range(threads):
         threading.Thread(target=cacheTokenMetadataThreadedHelper,
-                args=(threadStartTokenNum,
+                args=(cached_tokens,
+                    threadStartTokenNum,
                     threadStartTokenNum + step, i)).start()
         threadStartTokenNum += step + 1
 
 def getRawCacheFiles():
     return [file for file in os.listdir(RAW_CACHE_DIR) 
             if isfile(join(RAW_CACHE_DIR, file))]
+
+def getCachedTokens():
+    return [stripJSONSuffix(file) for file in getRawCacheFiles()]
 
 def createMasterJSON(contract, startTokenNum, endTokenNum):
     master_json = {}
@@ -84,11 +90,15 @@ def createMasterJSONThreaded(contract, startTokenNum,
     #  addTokensToMasterJSON(contract, startTokenNum, endTokenNum)
     return master_json
 
+def stripJSONSuffix(file_name):
+    return file_name.removesuffix('.json')
+
 def initMasterJSON():
     master_json = {}
     for file_name in getRawCacheFiles():
         with open(join(RAW_CACHE_DIR, file_name)) as json_file:
-            master_json[file_name.removesuffix('.json')] = json.load(json_file)
+            #  master_json[file_name.removesuffix('.json')] = json.load(json_file)
+            master_json[stripJSONSuffix(file_name)] = json.load(json_file)
     return master_json
 
 def cache_json(json_to_cache, file_name):

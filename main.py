@@ -9,10 +9,14 @@ if __name__ == "__main__":
     #  contract = getContract()
     #  cache.cacheTokenMetadata(contract, 1000, 1001)
     #  pprint(cache.createMasterJSON(contract, 1, 50))
+    #  pprint(cache.getCachedTokens())
 
     # step 1
+    #  cache.cacheTokenMetadataThreaded(0, 5, 1)
+    # hearts
     #  cache.cacheTokenMetadataThreaded(1, 9575, 100)
-    cache.cacheTokenMetadataThreaded(0, 5, 1)
+    # seals
+    cache.cacheTokenMetadataThreaded(1, 1000, 10)
 
     # step 2
     #  cache.cache_json(cache.initMasterJSON(), constants.MASTER_JSON_FILE)
