@@ -8,7 +8,9 @@ IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
 
 def initTraitTypes(master_json):
-    trait_counts = {}
+    #  trait_counts = {}
+    # grillz
+    trait_counts = {"GRILLZ SET": {}}
     attributes = master_json["1"]["attributes"]
     for attribute in attributes:
         trait_counts[attribute["trait_type"]] = {}

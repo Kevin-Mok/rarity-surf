@@ -13,6 +13,7 @@ if __name__ == "__main__":
     #  pprint(cache.getCachedTokens())
 
     # step 1
+    #  cache.cacheTokenMetadataThreaded(1, 5, 1)
     #  cache.cacheTokenMetadataThreaded(1, 1000, 1000 // 25)
     #  threads = ceil(constants.MAX_SUPPLY / 25)
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
@@ -25,7 +26,6 @@ if __name__ == "__main__":
     trait_counts = rarity.getTraitCounts(master_json)
     rarest_traits = rarity.calcRarestTraits(master_json, trait_counts)
     cache.cache_json(rarest_traits, constants.RARE_TRAITS_FILE)
-    cache.cache_json(rarity.calcAllTokenScores(master_json),
-            constants.RANKS_FILE)
+    cache.cache_json(rarity.calcAllTokenScores(master_json), constants.RANKS_FILE)
 
     #  pprint(cache.createMasterJSONThreaded(contract, 0, 100, 3))

@@ -4,16 +4,28 @@
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 #  MAX_SUPPLY = 7000
 
+# grillz
+CACHE_DIR = "./data/grillz"
+CONTRACT_ADDRESS = '0xbd9071b63f25dd199079ed80b3b384d78042956b'
+IPFS_HASH = "Qmer3VzaeFhb7c5uiwuHJbRuVCaUu72DcnSoUKb1EvnB2x"
+
+MAX_SUPPLY = 5555
+TOTAL_LISTED = 300
+ETH_FILTER = .8
+RANK_FILTER = 600
+
 # hearts
-CACHE_DIR = "./data/hearts"
-HEARTS_CONTRACT_ADDRESS = '0xce50f3ca1f1dbd6fa042666bc0e369565dda457d'
-CONTRACT_ADDRESS = '0xce50f3ca1f1dbd6fa042666bc0e369565dda457d'
-IPFS_HASH = "QmVzhBzCKB8sZgwqkok9rQvmQUdPv9yQBaEWrD9Tck5xAd"
-#  MAX_SUPPLY = 9685
-MAX_SUPPLY = 750
-TOTAL_LISTED = 500
-ETH_FILTER = 1
-RANK_FILTER = 500
+#  CACHE_DIR = "./data/hearts"
+#  HEARTS_CONTRACT_ADDRESS = '0xce50f3ca1f1dbd6fa042666bc0e369565dda457d'
+#  CONTRACT_ADDRESS = '0xce50f3ca1f1dbd6fa042666bc0e369565dda457d'
+#  #  IPFS_HASH = "QmVzhBzCKB8sZgwqkok9rQvmQUdPv9yQBaEWrD9Tck5xAd"
+#  IPFS_HASH = "QmcyEUCf5BHwgBEdzPbKc3N6S9MXDTFaQtm9jWyx35MS1u"
+
+#  #  MAX_SUPPLY = 9685
+#  MAX_SUPPLY = 1800
+#  TOTAL_LISTED = 850
+#  ETH_FILTER = 1
+#  RANK_FILTER = 400
 
 # seals
 #  CACHE_DIR = "./data/seals"
@@ -33,10 +45,10 @@ RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
 # file names
 ASSETS_FILE = f"{CACHE_DIR}/assets.json"
 LISTINGS_FILE = f"{CACHE_DIR}/listings.json"
+FILTERED_LISTINGS_FILE = f"{CACHE_DIR}/filtered-listings.json"
 MASTER_JSON_FILE = f"{CACHE_DIR}/master.json"
 RANKS_FILE = f"{CACHE_DIR}/ranks.json"
 RARE_TRAITS_FILE = f"{CACHE_DIR}/rare-traits.json"
 SCORES_FILE = f"{CACHE_DIR}/scores.json"
 
 OPENSEA_API_KEY = "2f6f419a083c46de9d83ce3dbe7db601"
-
