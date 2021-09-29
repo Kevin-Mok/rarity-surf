@@ -13,7 +13,7 @@ if __name__ == "__main__":
     #  pprint(cache.getCachedTokens())
 
     # step 1
-    #  cache.cacheTokenMetadataThreaded(0, 5, 1)
+    cache.cacheTokenMetadataThreaded(0, 5, 1)
 
     #  threads = ceil(constants.MAX_SUPPLY / 25)
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)

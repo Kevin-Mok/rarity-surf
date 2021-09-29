@@ -181,13 +181,12 @@ if __name__ == "__main__":
 
     # listings 
     # step 1
+    # done for hearts
     #  cache.cache_json(createMasterListings(), constants.LISTINGS_FILE)
 
     # step 2
-    #  listings = getEventsList(
-            #  cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
     listings = cache.read_json(constants.LISTINGS_FILE)
     filtered_listings = getFilteredListings(listings)
-    pprint(sortListingsByRank(filtered_listings))
-    #  listed = checkIfStillListed(filtered_listings)
-    #  pprint(sortListingsByRank(listed))
+    #  pprint(sortListingsByRank(filtered_listings))
+    listed = checkIfStillListed(filtered_listings)
+    pprint(sortListingsByRank(listed))
