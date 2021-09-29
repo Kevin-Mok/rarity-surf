@@ -124,23 +124,33 @@ def getFilteredListings(listings):
     for listing in listings.values():
         eth = getEth(listing["starting_price"])
         token_id = listing['asset']['token_id']
-        rank = ranks[token_id]['rank']
-        if (listing["auction_type"] == "dutch" and 
-                eth <= constants.ETH_FILTER and
-                rank <= constants.RANK_FILTER):
-            filtered_listings[token_id] = {
-                    "rank": rank,
-                    "eth": eth,
-                    }
+        if token_id in ranks:
+            rank = ranks[token_id]['rank']
+            if (listing["auction_type"] == "dutch" and 
+                    eth <= constants.ETH_FILTER and
+                    rank <= constants.RANK_FILTER):
+                filtered_listings[token_id] = {
+                        "rank": rank,
+                        "eth": eth,
+                        }
     return filtered_listings
     
 def checkIfStillListed(listings):
     token_ids = list(listings.keys())
     cache.cache_json(getAssetsAPI(token_ids), constants.ASSETS_FILE)
     assets = getAssetsList(cache.read_json(constants.ASSETS_FILE))
-    listed_assets = [asset["token_id"]
-            for asset in assets
-            if asset["sell_orders"]]
+    #  listed_assets = [asset["token_id"]
+            #  for asset in assets
+            #  if (asset["sell_orders"] and
+                #  asset["sell_orders"]["current_price"])]
+    listed_assets = []
+    for asset in assets:
+        if asset["sell_orders"]:
+            raw_cur_price = asset["sell_orders"][0]["current_price"]
+            cur_price = getEth(raw_cur_price.split(".", 1)[0])
+                    #  asset["sell_orders"][0]["current_bounty"])
+            if cur_price <= constants.ETH_FILTER:
+                listed_assets.append(asset["token_id"])
     return {token_id:values 
             for (token_id, values) in listings.items()
             if token_id in listed_assets}
@@ -181,12 +191,10 @@ if __name__ == "__main__":
 
     # listings 
     # step 1
-    # done for hearts
     #  cache.cache_json(createMasterListings(), constants.LISTINGS_FILE)
 
     # step 2
     listings = cache.read_json(constants.LISTINGS_FILE)
     filtered_listings = getFilteredListings(listings)
-    #  pprint(sortListingsByRank(filtered_listings))
     listed = checkIfStillListed(filtered_listings)
     pprint(sortListingsByRank(listed))

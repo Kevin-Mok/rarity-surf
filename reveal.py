@@ -5,7 +5,7 @@ import rarity
 from pprint import pprint
 from web3_api import getContract, getIPFSHash, getTokenMetadata, getTokenURI
 
-TOKEN_NUM = 5
+TOKEN_NUM = 1
 UNREVEALED_URI = f"QmSMahwiwLRNFnSzYKeHhbzLtqhbF8XzCGDoRxdzLqLFz6/{TOKEN_NUM}"
 
 if __name__ == "__main__":

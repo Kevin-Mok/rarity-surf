@@ -22,9 +22,11 @@ def cacheTokenMetadataThreadedHelper(cached_tokens, startTokenNum, endTokenNum, 
     for tokenNum in range(startTokenNum, endTokenNum + 1):
         if str(tokenNum) not in cached_tokens:
             tokenMetadata = getTokenMetadata(tokenNum)
-            with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
-                print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
-                json.dump(tokenMetadata, out, indent=2)
+            #  print(f"Thread #{threadNum}: Checking token #{tokenNum} for attributes.")
+            if "attributes" in tokenMetadata:
+                with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
+                    print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
+                    json.dump(tokenMetadata, out, indent=2)
 
 def cacheTokenMetadataThreaded(startTokenNum, endTokenNum, threads):
     #  print(startTokenNum, endTokenNum, threads)
