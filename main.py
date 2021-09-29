@@ -19,10 +19,11 @@ if __name__ == "__main__":
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
 
     # step 2
-    cache.cache_json(cache.initMasterJSON(), constants.MASTER_JSON_FILE)
+    master_json = cache.initMasterJSON()
+    cache.cache_json(master_json, constants.MASTER_JSON_FILE)
+    #  master_json = cache.read_json(constants.MASTER_JSON_FILE)
 
-    # step 3
-    master_json = cache.read_json(constants.MASTER_JSON_FILE)
+    #  TODO: create sorted rank file # 
     trait_counts = rarity.getTraitCounts(master_json)
     rarest_traits = rarity.calcRarestTraits(master_json, trait_counts)
     cache.cache_json(rarest_traits, constants.RARE_TRAITS_FILE)

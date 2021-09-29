@@ -105,8 +105,8 @@ def initMasterJSON():
 
 def cache_json(json_to_cache, file_name):
     with open(file_name, 'w') as out:
+        print(f"Caching {file_name}.")
         json.dump(json_to_cache, out, indent=2, sort_keys=True)
-        #  json.dump(json_to_cache, out)
 
 def read_json(file_name):
     with open(file_name) as in_file:

@@ -15,11 +15,11 @@ ASSETS_API = f"{OS_API}/assets"
 EVENTS_API = f"{OS_API}/events"
 API_HEADERS = {"Accept": "application/json"}
 
-EVENT_TYPE = "successful" # sales
-MAX_LIMIT = 300 # sales
 
-#  EVENT_TYPE = "created" # listings
-#  MAX_LIMIT = 50 # other
+#  EVENT_TYPE = "successful" # sales
+#  MAX_LIMIT = 300
+EVENT_TYPE = "created" # listings
+MAX_LIMIT = 50
 
 #  MAX_LIMIT = 5 # tesing
 
@@ -28,6 +28,7 @@ MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
 MASTER_SALES_SUMMARY_FILE = f"{SALES_DIR}/master-os-sales-summary.json"
 
 # master sales keys
+RANK_KEY = "rank"
 TIMESTAMP_KEY = "timestamp"
 TOKEN_ID_KEY = "token_id"
 ETH_KEY = "eth"
@@ -129,17 +130,18 @@ def getFilteredListings(listings):
     filtered_listings = {}
     for listing in listings.values():
         eth = getEth(listing["starting_price"])
-        token_id = listing['asset']['token_id']
-        if (token_id not in filtered_listings and
-                token_id in ranks):
-            rank = ranks[token_id]['rank']
-            if (listing["auction_type"] == "dutch" and 
-                    eth <= constants.ETH_FILTER and
-                    rank <= constants.RANK_FILTER):
-                filtered_listings[token_id] = {
-                        "rank": rank,
-                        ETH_KEY: eth,
-                        }
+        if listing['asset']:
+            token_id = listing['asset']['token_id']
+            if (token_id not in filtered_listings and
+                    token_id in ranks):
+                rank = ranks[token_id]['rank']
+                if (listing["auction_type"] == "dutch" and 
+                        eth <= constants.ETH_FILTER and
+                        rank <= constants.RANK_FILTER):
+                    filtered_listings[token_id] = {
+                            RANK_KEY: rank,
+                            ETH_KEY: eth,
+                            }
     return filtered_listings
     
 def checkIfStillListed(listings):
@@ -163,7 +165,7 @@ def checkIfStillListed(listings):
 def sortListingsByRank(listings):
     ranked_listings = {}
     for (token_id, values) in listings.items():
-        ranked_listings[values["rank"]] = {
+        ranked_listings[values[RANK_KEY]] = {
                 TOKEN_ID_KEY: token_id,
                 ETH_KEY: values[ETH_KEY],
                 }
@@ -193,6 +195,28 @@ def updateMasterListings(start_page, end_page):
     cache.cache_json(master_listings, constants.LISTINGS_FILE)
     return master_listings
 
+def getRefilteredListings():
+    listings = cache.read_json(constants.LISTINGS_FILE)
+    filtered_listings = getFilteredListings(listings)
+    filtered_listings = checkIfStillListed(filtered_listings)
+    ranks = cache.read_json(constants.RANKS_FILE)
+
+    #  pprint(filtered_listings)
+    filtered_listings_info = {}
+    for token_id in filtered_listings.keys():
+        #  token_id = filtered_listings[rank][TOKEN_ID_KEY]
+        rank = filtered_listings[token_id][RANK_KEY]
+        #  pprint(filtered_listings[token_id])
+        #  pprint(ranks[token_id])
+        filtered_listings_info[rank] = (filtered_listings[token_id] |
+                ranks[token_id])
+        filtered_listings_info[rank].pop(RANK_KEY)
+    #  cache.cache_json(filtered_listings, constants.FILTERED_LISTINGS_FILE)
+    #  cache.cache_json(sortListingsByRank(listed),
+            #  constants.FILTERED_LISTINGS_FILE)
+    #  return listed
+    return filtered_listings_info
+
 if __name__ == "__main__":
     # sales
     """
@@ -201,13 +225,13 @@ if __name__ == "__main__":
     - ETH to filter by
     - none to print all
     """
-    if len(argv) > 1:
-        if argv[1] == "update":
-            sale_summaries = updateMasterSaleSummaries(3)
-        else:
-            printAllSaleSummaries(getCachedSaleSummaries(), float(argv[1]))
-    else:
-        printAllSaleSummaries(getCachedSaleSummaries())
+    #  if len(argv) > 1:
+        #  if argv[1] == "update":
+            #  sale_summaries = updateMasterSaleSummaries(1)
+        #  else:
+            #  printAllSaleSummaries(getCachedSaleSummaries(), float(argv[1]))
+    #  else:
+        #  printAllSaleSummaries(getCachedSaleSummaries())
 
     # listings 
     #  pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
@@ -217,14 +241,30 @@ if __name__ == "__main__":
     #  updateMasterListings(0, 1)
 
     # step 1: create initial listings
-    #  cache.cache_json(createMasterListings(constants.TOTAL_LISTED // 50),
-            #  constants.LISTINGS_FILE)
+    #  cache.cache_json(createMasterListings(
+        #  #  constants.TOTAL_LISTED * 2 // 50),
+        #  constants.TOTAL_LISTED // 50),
+        #  constants.LISTINGS_FILE)
 
     # step 3: filter listings
     #  listings = cache.read_json(constants.LISTINGS_FILE)
     #  filtered_listings = getFilteredListings(listings)
-    #  #  pprint(sortListingsByRank(filtered_listings))
+    #  pprint(sortListingsByRank(filtered_listings))
     #  listed = checkIfStillListed(filtered_listings)
-    #  #  pprint(sortListingsByRank(listed))
+    #  pprint(sortListingsByRank(listed))
     #  cache.cache_json(sortListingsByRank(listed),
             #  constants.FILTERED_LISTINGS_FILE)
+    #  pprint(getRefilteredListings())
+
+    # step 4: append rank info
+    #  listings = cache.read_json(constants.LISTINGS_FILE)
+    #  filtered_listings = cache.read_json(constants.FILTERED_LISTINGS_FILE)
+    #  ranks = cache.read_json(constants.RANKS_FILE)
+    #  for rank in filtered_listings.keys():
+        #  token_id = filtered_listings[rank][TOKEN_ID_KEY]
+        #  filtered_listings[rank] = (filtered_listings[rank] |
+                #  ranks[token_id])
+        #  filtered_listings[rank].pop("rank")
+    #  cache.cache_json(filtered_listings, constants.FILTERED_LISTINGS_FILE)
+    #  pprint(getRefilteredListings())
+    cache.cache_json(getRefilteredListings(), constants.FILTERED_LISTINGS_FILE)

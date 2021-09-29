@@ -106,9 +106,7 @@ def calcAllTokenScores(master_json):
         rank += 1
     return ranked_tokens
 
-
 if __name__ == "__main__":
-    #  TODO:  # 
     ranks = cache.read_json(constants.RANKS_FILE)
     ranks_list = []
     for token_id in ranks.keys():
