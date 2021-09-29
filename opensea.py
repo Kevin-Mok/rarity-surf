@@ -3,6 +3,7 @@ import constants
 
 from datetime import datetime
 from dateutil import tz
+from math import ceil
 import json
 import pdb
 from pprint import pprint
@@ -120,7 +121,7 @@ def getCachedSaleSummaries():
 def getFilteredListings(listings):
     ranks = cache.read_json(constants.RANKS_FILE)
     filtered_listings = {}
-    for listing in listings:
+    for listing in listings.values():
         eth = getEth(listing["starting_price"])
         token_id = listing['asset']['token_id']
         rank = ranks[token_id]['rank']
@@ -153,6 +154,15 @@ def sortListingsByRank(listings):
                 }
     return ranked_listings
 
+def createMasterListings():
+    pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
+    master_listings = {}
+    for page in range(pages):
+        page_listings = getEventsList(getSalesData(page))
+        for listing in page_listings:
+            master_listings[listing["id"]] = listing
+    return master_listings
+
 if __name__ == "__main__":
     # sales
     """
@@ -171,12 +181,13 @@ if __name__ == "__main__":
 
     # listings 
     # step 1
-    #  cache.cache_json(getSalesData(0), constants.LISTINGS_FILE)
+    #  cache.cache_json(createMasterListings(), constants.LISTINGS_FILE)
 
     # step 2
-    listings = getEventsList(
-            cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
+    #  listings = getEventsList(
+            #  cache.read_json(f"{constants.CACHE_DIR}/listings.json"))
+    listings = cache.read_json(constants.LISTINGS_FILE)
     filtered_listings = getFilteredListings(listings)
-    #  pprint(filtered_listings)
-    listed = checkIfStillListed(filtered_listings)
-    pprint(sortListingsByRank(listed))
+    pprint(sortListingsByRank(filtered_listings))
+    #  listed = checkIfStillListed(filtered_listings)
+    #  pprint(sortListingsByRank(listed))
