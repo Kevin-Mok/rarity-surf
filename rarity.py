@@ -1,5 +1,6 @@
 import cache
 import constants
+from opensea import TOKEN_ID_KEY
 import web3_api
 
 from pprint import pprint
@@ -104,3 +105,15 @@ def calcAllTokenScores(master_json):
                 }
         rank += 1
     return ranked_tokens
+
+
+if __name__ == "__main__":
+    #  TODO:  # 
+    ranks = cache.read_json(constants.RANKS_FILE)
+    ranks_list = []
+    for token_id in ranks.keys():
+        rank = ranks[token_id]
+        rank[TOKEN_ID_KEY] = token_id
+        ranks_list.append(rank)
+    sorted_ranks = sorted(ranks_list, key=lambda x: x["rank"])
+    cache.cache_json(sorted_ranks, constants.SORTED_RANKS_FILE)

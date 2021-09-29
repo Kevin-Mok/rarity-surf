@@ -14,11 +14,14 @@ OS_API = "https://api.opensea.io/api/v1"
 ASSETS_API = f"{OS_API}/assets"
 EVENTS_API = f"{OS_API}/events"
 API_HEADERS = {"Accept": "application/json"}
-#  EVENT_TYPE = "successful"
-EVENT_TYPE = "created"
-#  MAX_LIMIT = 300
-MAX_LIMIT = 50
-#  MAX_LIMIT = 5
+
+EVENT_TYPE = "successful" # sales
+MAX_LIMIT = 300 # sales
+
+#  EVENT_TYPE = "created" # listings
+#  MAX_LIMIT = 50 # other
+
+#  MAX_LIMIT = 5 # tesing
 
 SALES_DIR = f"{constants.CACHE_DIR}/sales"
 MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
@@ -198,13 +201,13 @@ if __name__ == "__main__":
     - ETH to filter by
     - none to print all
     """
-    #  if len(argv) > 1:
-        #  if argv[1] == "update":
-            #  sale_summaries = updateMasterSaleSummaries(0)
-        #  else:
-            #  printAllSaleSummaries(getCachedSaleSummaries(), int(argv[1]))
-    #  else:
-        #  printAllSaleSummaries(getCachedSaleSummaries())
+    if len(argv) > 1:
+        if argv[1] == "update":
+            sale_summaries = updateMasterSaleSummaries(3)
+        else:
+            printAllSaleSummaries(getCachedSaleSummaries(), float(argv[1]))
+    else:
+        printAllSaleSummaries(getCachedSaleSummaries())
 
     # listings 
     #  pages = ceil(constants.TOTAL_LISTED / MAX_LIMIT)
@@ -218,10 +221,10 @@ if __name__ == "__main__":
             #  constants.LISTINGS_FILE)
 
     # step 3: filter listings
-    listings = cache.read_json(constants.LISTINGS_FILE)
-    filtered_listings = getFilteredListings(listings)
-    #  pprint(sortListingsByRank(filtered_listings))
-    listed = checkIfStillListed(filtered_listings)
-    #  pprint(sortListingsByRank(listed))
-    cache.cache_json(sortListingsByRank(listed),
-            constants.FILTERED_LISTINGS_FILE)
+    #  listings = cache.read_json(constants.LISTINGS_FILE)
+    #  filtered_listings = getFilteredListings(listings)
+    #  #  pprint(sortListingsByRank(filtered_listings))
+    #  listed = checkIfStillListed(filtered_listings)
+    #  #  pprint(sortListingsByRank(listed))
+    #  cache.cache_json(sortListingsByRank(listed),
+            #  constants.FILTERED_LISTINGS_FILE)
