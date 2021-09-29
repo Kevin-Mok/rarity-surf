@@ -15,11 +15,12 @@ ASSETS_API = f"{OS_API}/assets"
 EVENTS_API = f"{OS_API}/events"
 API_HEADERS = {"Accept": "application/json"}
 
-
+#  TODO: pass in as arg # 
 #  EVENT_TYPE = "successful" # sales
 #  MAX_LIMIT = 300
 EVENT_TYPE = "created" # listings
 MAX_LIMIT = 50
+LISTINGS_MAX_LIMIT = 50
 
 #  MAX_LIMIT = 5 # tesing
 
@@ -28,9 +29,9 @@ MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
 MASTER_SALES_SUMMARY_FILE = f"{SALES_DIR}/master-os-sales-summary.json"
 
 # master sales keys
-RANK_KEY = "rank"
+#  RANK_KEY = "rank"
 TIMESTAMP_KEY = "timestamp"
-TOKEN_ID_KEY = "token_id"
+#  TOKEN_ID_KEY = "token_id"
 ETH_KEY = "eth"
 
 def getAssetsAPI(token_id_list):
@@ -139,7 +140,7 @@ def getFilteredListings(listings):
                         eth <= constants.ETH_FILTER and
                         rank <= constants.RANK_FILTER):
                     filtered_listings[token_id] = {
-                            RANK_KEY: rank,
+                            constants.RANK_KEY: rank,
                             ETH_KEY: eth,
                             }
     return filtered_listings
@@ -165,7 +166,7 @@ def checkIfStillListed(listings):
 def sortListingsByRank(listings):
     ranked_listings = {}
     for (token_id, values) in listings.items():
-        ranked_listings[values[RANK_KEY]] = {
+        ranked_listings[values[constants.RANK_KEY]] = {
                 TOKEN_ID_KEY: token_id,
                 ETH_KEY: values[ETH_KEY],
                 }
@@ -203,10 +204,10 @@ def getRefilteredListings():
 
     filtered_listings_info = {}
     for token_id in filtered_listings.keys():
-        rank = filtered_listings[token_id][RANK_KEY]
+        rank = filtered_listings[token_id][constants.RANK_KEY]
         filtered_listings_info[rank] = (filtered_listings[token_id] |
                 ranks[token_id])
-        filtered_listings_info[rank].pop(RANK_KEY)
+        filtered_listings_info[rank][constants.TOKEN_ID_KEY] = token_id
     return filtered_listings_info
 
 if __name__ == "__main__":
@@ -234,8 +235,8 @@ if __name__ == "__main__":
 
     # step 1: create initial listings
     #  cache.cache_json(createMasterListings(
-        #  #  constants.TOTAL_LISTED * 2 // 50),
-        #  constants.TOTAL_LISTED // 50),
+        #  #  constants.TOTAL_LISTED * 2 // LISTINGS_MAX_LIMIT),
+        #  constants.TOTAL_LISTED // LISTINGS_MAX_LIMIT),
         #  constants.LISTINGS_FILE)
 
     # step 3: filter listings

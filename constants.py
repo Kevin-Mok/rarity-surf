@@ -11,7 +11,7 @@ CONTRACT_ADDRESS = '0xbd9071b63f25dd199079ed80b3b384d78042956b'
 IPFS_HASH = "Qmer3VzaeFhb7c5uiwuHJbRuVCaUu72DcnSoUKb1EvnB2x"
 MAX_SUPPLY = 5555
 TOTAL_LISTED = 700
-ETH_FILTER = .9
+ETH_FILTER = 1
 RANK_FILTER = 600
 
 #  }}} grillz # 
@@ -43,6 +43,9 @@ RANK_FILTER = 600
 # uwucrew
 #  CACHE_DIR = "./data/uwucrew"
 #  MAX_SUPPLY = 9670
+
+RANK_KEY = "rank"
+TOKEN_ID_KEY = "token_id"
 
 RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
 

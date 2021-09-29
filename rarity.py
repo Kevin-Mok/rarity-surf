@@ -1,12 +1,13 @@
 import cache
 import constants
-from opensea import TOKEN_ID_KEY
 import web3_api
 
 from pprint import pprint
 
 IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
+
+#  RANK_KEY = "rank"
 
 def initTraitTypes(master_json):
     #  trait_counts = {}
@@ -97,7 +98,7 @@ def calcAllTokenScores(master_json):
                 master_json[token_id]["image"])
         os_url = f"{OS_ASSETS_URL}/{constants.CONTRACT_ADDRESS}/{token_id}", 
         ranked_tokens[token_id] = {
-                "rank": rank,
+                constants.RANK_KEY: rank,
                 "score": token_score[1],
                 "rarest_traits": rarest_token_traits,
                 "image_url": f"{IPFS_URL}/{image_ipfs_hash}",
@@ -106,12 +107,11 @@ def calcAllTokenScores(master_json):
         rank += 1
     return ranked_tokens
 
-if __name__ == "__main__":
-    ranks = cache.read_json(constants.RANKS_FILE)
+def getSortedRanks(ranks):
     ranks_list = []
     for token_id in ranks.keys():
         rank = ranks[token_id]
-        rank[TOKEN_ID_KEY] = token_id
+        rank[constants.TOKEN_ID_KEY] = token_id
         ranks_list.append(rank)
-    sorted_ranks = sorted(ranks_list, key=lambda x: x["rank"])
-    cache.cache_json(sorted_ranks, constants.SORTED_RANKS_FILE)
+    sorted_ranks = sorted(ranks_list, key=lambda x: x[constants.RANK_KEY])
+    return sorted_ranks
