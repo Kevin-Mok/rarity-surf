@@ -1,18 +1,22 @@
-# 7s
 #  CACHE_DIR = "./data/sevens"
 #  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 #  MAX_SUPPLY = 7000
 
+#  }}} 7s # 
+
 #  grillz {{{ # 
 
-CACHE_DIR = "./data/grillz"
-CONTRACT_ADDRESS = '0xbd9071b63f25dd199079ed80b3b384d78042956b'
-IPFS_HASH = "Qmer3VzaeFhb7c5uiwuHJbRuVCaUu72DcnSoUKb1EvnB2x"
-MAX_SUPPLY = 5555
-TOTAL_LISTED = 700
-ETH_FILTER = 1
-RANK_FILTER = 600
+#  CACHE_DIR = "./data/grillz"
+#  CONTRACT_ADDRESS = '0xbd9071b63f25dd199079ed80b3b384d78042956b'
+#  IPFS_HASH = "Qmer3VzaeFhb7c5uiwuHJbRuVCaUu72DcnSoUKb1EvnB2x"
+#  MAX_SUPPLY = 5555
+
+#  TOTAL_LISTED = 1330
+#  #  ETH_FILTER = .4
+#  #  RANK_FILTER = 550
+#  ETH_FILTER = .6
+#  RANK_FILTER = 1000
 
 #  }}} grillz # 
 
@@ -20,13 +24,29 @@ RANK_FILTER = 600
 
 #  CACHE_DIR = "./data/hearts"
 #  CONTRACT_ADDRESS = '0xce50f3ca1f1dbd6fa042666bc0e369565dda457d'
-#  IPFS_HASH = "QmUYx3kvansQto2bJaLiuMQrDotEXC445XDdErw1PpBnVR"
-#  MAX_SUPPLY = 3725
-#  TOTAL_LISTED = 900
-#  ETH_FILTER = 1
-#  RANK_FILTER = 400
+#  IPFS_HASH = "QmWzHd7dtHqxEY55WW64dTr8HJH47qMxWb3vD94Csr9jUs"
+
+#  MAX_SUPPLY = 9718
+#  TOTAL_LISTED = 1900
+#  ETH_FILTER = .6
+#  RANK_FILTER = 1000
 
 #  }}} hearts # 
+
+#  obits {{{ # 
+
+#  CACHE_DIR = "./data/obits"
+#  CONTRACT_ADDRESS = "0x30cdac3871c41a63767247c8d1a2de59f5714e78"
+#  IPFS_HASH = "Qmb5zeyvU7ZpotLDzkUmSeMDA71MExp8eJyNeefGdoeA2x"
+
+#  MAX_SUPPLY = 7132
+#  TOTAL_LISTED = 1080
+#  ETH_FILTER = .2
+#  RANK_FILTER = 700
+
+#  }}} obits # 
+
+#  7s {{{ # 
 
 #  seals {{{ # 
 

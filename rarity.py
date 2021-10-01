@@ -11,8 +11,8 @@ OS_ASSETS_URL = "https://opensea.io/assets"
 
 def initTraitTypes(master_json):
     #  trait_counts = {}
-    # grillz
-    trait_counts = {"GRILLZ SET": {}}
+    #  trait_counts = {"GRILLZ SET": {}} # grillz
+    trait_counts = {"Dead Ringer": {}} # obits
     attributes = master_json["1"]["attributes"]
     for attribute in attributes:
         trait_counts[attribute["trait_type"]] = {}
