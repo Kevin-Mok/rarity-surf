@@ -81,6 +81,7 @@ RANK_FILTER = 2000
 #  CACHE_DIR = "./data/uwucrew"
 #  MAX_SUPPLY = 9670
 
+ATTRIBUTES_KEY = "attributes"
 RANK_KEY = "rank"
 TOKEN_ID_KEY = "token_id"
 

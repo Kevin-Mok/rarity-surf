@@ -1,7 +1,5 @@
 # Road Map
 - make script more usable
-  - verify algo correspondence with rarity.tools
-    - scrape and compare mine with other tools
 - MVP for running for user testing
   - Django backend
   - Vue front-end

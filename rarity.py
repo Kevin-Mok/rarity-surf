@@ -7,29 +7,39 @@ from pprint import pprint
 IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
 
-#  RANK_KEY = "rank"
+NO_TRAIT_KEY = "no_trait"
+TRAIT_TYPE_KEY = "trait_type"
+TRAIT_VALUE_KEY = "value"
 
 def initTraitTypes(master_json):
     trait_counts = {}
-    for values in master_json.values():
-        attributes_to_add = [traits["trait_type"] 
-                for traits in values["attributes"]
-                if traits["trait_type"] not in trait_counts]
+    for token_json in master_json.values():
+        attributes_to_add = [traits[TRAIT_TYPE_KEY] 
+                for traits in token_json[constants.ATTRIBUTES_KEY]
+                if traits[TRAIT_TYPE_KEY] not in trait_counts]
         for attribute in attributes_to_add:
             trait_counts[attribute] = {}
     return trait_counts
 
-def incrTraitValue(trait_counts, attribute):
-    if attribute["value"] in trait_counts[attribute["trait_type"]]:
-        trait_counts[attribute["trait_type"]][attribute["value"]] += 1
+def incrTraitValue(trait_counts, trait_type, trait_value):
+    if trait_value in trait_counts[trait_type]:
+        trait_counts[trait_type][trait_value] += 1
     else:
-        trait_counts[attribute["trait_type"]][attribute["value"]] = 1
+        trait_counts[trait_type][trait_value] = 1
 
 def getTraitCounts(master_json):
     trait_counts = initTraitTypes(master_json)
     for token_json in master_json.values():
-        for attribute in token_json["attributes"]:
-            incrTraitValue(trait_counts, attribute)
+        token_attributes = {}
+        for attribute in token_json[constants.ATTRIBUTES_KEY]:
+            token_attributes[attribute[TRAIT_TYPE_KEY]] = \
+                    attribute[TRAIT_VALUE_KEY]
+
+        for trait_type in trait_counts:
+            trait_value_incr = (token_attributes[trait_type]
+                    if trait_type in token_attributes
+                    else NO_TRAIT_KEY)
+            incrTraitValue(trait_counts, trait_type, trait_value_incr)
     return trait_counts
 
 def calcRarestTraits(master_json, trait_counts):
@@ -53,9 +63,9 @@ def calcTraitScores(master_json, trait_counts):
 
 def calcTokenScore(master_json, trait_scores, token_num):
     token_score = 0
-    for attribute in master_json[token_num]["attributes"]:
+    for attribute in master_json[token_num][constants.ATTRIBUTES_KEY]:
         token_score += \
-                trait_scores[attribute["trait_type"]][attribute["value"]]
+                trait_scores[attribute[TRAIT_TYPE_KEY]][attribute[TRAIT_VALUE_KEY]]
     return token_score
 
 def formatPercentage(percentage):
@@ -64,10 +74,10 @@ def formatPercentage(percentage):
 def getRarestAttributes(rarest_traits, attributes):
     attribute_rarities = []
     for attribute in attributes:
-        rarity_percentage = rarest_traits[attribute["trait_type"]][attribute["value"]]
+        rarity_percentage = rarest_traits[attribute[TRAIT_TYPE_KEY]][attribute[TRAIT_VALUE_KEY]]
         attribute_rarities.append({
-                "trait_type": attribute["trait_type"],
-                "trait": attribute["value"],
+                TRAIT_TYPE_KEY: attribute[TRAIT_TYPE_KEY],
+                "trait": attribute[TRAIT_VALUE_KEY],
                 "rarity": rarity_percentage,
                 })
 
@@ -94,7 +104,7 @@ def calcAllTokenScores(master_json):
     for token_score in sorted_token_scores:
         token_id = str(token_score[0])
         rarest_token_traits = getRarestAttributes(rarest_traits,
-                master_json[token_id]["attributes"])
+                master_json[token_id][constants.ATTRIBUTES_KEY])
         image_ipfs_hash = web3_api.getIPFSHash(
                 master_json[token_id]["image"])
         os_url = f"{OS_ASSETS_URL}/{constants.CONTRACT_ADDRESS}/{token_id}", 
@@ -118,4 +128,6 @@ def getSortedRanks(ranks):
     return sorted_ranks
 
 if __name__ == "__main__":
-    pprint(initTraitTypes(cache.initMasterJSON()))
+    master_json = cache.initMasterJSON()
+    #  pprint(initTraitTypes(master_json))
+    #  pprint(getTraitCounts(master_json))
