@@ -69,7 +69,7 @@ def calcTokenScore(master_json, trait_scores, token_num):
     return token_score
 
 def formatPercentage(percentage):
-    return f"{percentage * 100:.1f}%"
+    return f"{percentage * 100:.2f}%"
 
 def getRarestAttributes(rarest_traits, attributes):
     attribute_rarities = []
@@ -127,7 +127,18 @@ def getSortedRanks(ranks):
     sorted_ranks = sorted(ranks_list, key=lambda x: x[constants.RANK_KEY])
     return sorted_ranks
 
+def interactiveRankSearch():
+    ranks = cache.read_json(constants.RANKS_FILE)
+    while True:
+        token_id = input('Token #: ')
+        if token_id in ranks:
+            pprint(ranks[token_id])
+        else:
+            print("Token # not found.")
+
 if __name__ == "__main__":
-    master_json = cache.initMasterJSON()
-    #  pprint(initTraitTypes(master_json))
+    #  master_json = cache.initMasterJSON()
+    #  #  pprint(initTraitTypes(master_json))
     #  pprint(getTraitCounts(master_json))
+
+    interactiveRankSearch()

@@ -11,6 +11,8 @@ def cacheMetadataJSONS():
     cache.cache_json(master_json, constants.MASTER_JSON_FILE)
 
     trait_counts = rarity.getTraitCounts(master_json)
+    cache.cache_json(trait_counts, constants.TRAIT_COUNTS_FILE)
+
     rarest_traits = rarity.calcRarestTraits(master_json, trait_counts)
     cache.cache_json(rarest_traits, constants.RARE_TRAITS_FILE)
 

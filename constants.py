@@ -96,5 +96,6 @@ RANKS_FILE = f"{CACHE_DIR}/ranks.json"
 RARE_TRAITS_FILE = f"{CACHE_DIR}/rare-traits.json"
 SCORES_FILE = f"{CACHE_DIR}/scores.json"
 SORTED_RANKS_FILE = f"{CACHE_DIR}/sorted-ranks.json"
+TRAIT_COUNTS_FILE = f"{CACHE_DIR}/trait-counts.json"
 
 OPENSEA_API_KEY = "2f6f419a083c46de9d83ce3dbe7db601"
