@@ -1,7 +1,7 @@
 # Road Map
 - make script more usable
   - verify algo correspondence with rarity.tools
-    - scrape and compare
+    - scrape and compare mine with other tools
 - MVP for running for user testing
   - Django backend
   - Vue front-end
@@ -11,9 +11,6 @@
   - Discord login to web app
     - check if in server
     - add MM wallet addy
-- sub model for acc tied to Discord/MM so as to not rug
-  - best interest to not scam
-    - already made product
 - monitor listings
   - pay to
     - set up multiple watch filters
@@ -38,6 +35,13 @@
     - active user
     - both users get discount
 - discounted beta access
+- survey for user feedback
+
+## FAQ
+- comparison with other tools
+- sub model for acc tied to Discord/MM so as to not rug
+  - best interest to not scam
+    - already made product
 
 ## Stand Out
 - transparent algo accuracy with rarity.tools

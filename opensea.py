@@ -232,8 +232,8 @@ if __name__ == "__main__":
 
     # step 1: create initial listings
     #  cache.cache_json(createMasterListings(
-        #  #  constants.TOTAL_LISTED * 2 // LISTINGS_MAX_LIMIT),
-        #  constants.TOTAL_LISTED // LISTINGS_MAX_LIMIT),
+        #  constants.TOTAL_LISTED * 2 // LISTINGS_MAX_LIMIT),
+        #  #  constants.TOTAL_LISTED // LISTINGS_MAX_LIMIT),
         #  constants.LISTINGS_FILE)
 
     # step 2: filter listings

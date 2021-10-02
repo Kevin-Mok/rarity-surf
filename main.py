@@ -28,7 +28,6 @@ if __name__ == "__main__":
 
     # step 1: cache metadata
     #  cache.cacheTokenMetadataThreaded(1, 5, 1)
-    #  cache.cacheTokenMetadataThreaded(1, 1000, 1000 // 25)
 
     #  threads = ceil(constants.MAX_SUPPLY / 25)
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)

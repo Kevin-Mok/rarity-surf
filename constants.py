@@ -1,9 +1,26 @@
+#  {{{ 7s # 
+
 #  CACHE_DIR = "./data/sevens"
 #  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 #  MAX_SUPPLY = 7000
 
 #  }}} 7s # 
+
+#  capsule {{{ # 
+
+CACHE_DIR = "./data/capsule"
+CONTRACT_ADDRESS = '0xfcb1315c4273954f74cb16d5b663dbf479eec62e'
+IPFS_HASH = "Qmb5Li2q37epqqo26VMpFhzBs5RqU1BJMCfrRgXR6pe6Fm"
+MAX_SUPPLY = 10000
+
+TOTAL_LISTED = 1020
+#  ETH_FILTER = .3
+#  RANK_FILTER = 1000
+ETH_FILTER = .5
+RANK_FILTER = 2000
+
+#  }}} capsule # 
 
 #  grillz {{{ # 
 

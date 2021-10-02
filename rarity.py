@@ -10,12 +10,13 @@ OS_ASSETS_URL = "https://opensea.io/assets"
 #  RANK_KEY = "rank"
 
 def initTraitTypes(master_json):
-    #  trait_counts = {}
-    #  trait_counts = {"GRILLZ SET": {}} # grillz
-    trait_counts = {"Dead Ringer": {}} # obits
-    attributes = master_json["1"]["attributes"]
-    for attribute in attributes:
-        trait_counts[attribute["trait_type"]] = {}
+    trait_counts = {}
+    for values in master_json.values():
+        attributes_to_add = [traits["trait_type"] 
+                for traits in values["attributes"]
+                if traits["trait_type"] not in trait_counts]
+        for attribute in attributes_to_add:
+            trait_counts[attribute] = {}
     return trait_counts
 
 def incrTraitValue(trait_counts, attribute):
@@ -115,3 +116,6 @@ def getSortedRanks(ranks):
         ranks_list.append(rank)
     sorted_ranks = sorted(ranks_list, key=lambda x: x[constants.RANK_KEY])
     return sorted_ranks
+
+if __name__ == "__main__":
+    pprint(initTraitTypes(cache.initMasterJSON()))
