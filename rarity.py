@@ -61,15 +61,19 @@ def calcRarestTraits(master_json, trait_counts):
                     trait_counts[trait_type][trait] / constants.MAX_SUPPLY
     return trait_percentages
 
-def calcTraitScore(trait_count):
-    return 1 / trait_count / constants.MAX_SUPPLY * (10 ** 8)
+def calcTraitScore(trait_count, num_trait_values):
+    # from rarity.tools article + trait normalization
+    # https://raritytools.medium.com/ranking-rarity-understanding-rarity-calculation-methods-86ceaeb9b98c
+    return (1 / trait_count / constants.MAX_SUPPLY /
+            num_trait_values * (10 ** 8))
 
 def calcTraitScores(master_json, trait_counts):
     trait_scores = initTraitTypes(master_json)
     for trait_type in trait_counts:
         for trait in trait_counts[trait_type]:
             trait_scores[trait_type][trait] = \
-                    calcTraitScore(trait_counts[trait_type][trait])
+                    calcTraitScore(trait_counts[trait_type][trait],
+                            len(trait_counts[trait_type]))
     return trait_scores
 
 def calcTokenScore(master_json, trait_scores, token_num):
