@@ -7,8 +7,10 @@ from pprint import pprint
 from web3_api import getContract, getIPFSHash, getTokenMetadata, getTokenURI
 
 def cacheMetadataJSONS():
-    master_json = cache.initMasterJSON()
-    cache.cache_json(master_json, constants.MASTER_JSON_FILE)
+    #  master_json = cache.initMasterJSON()
+    #  rarity.addNumberTraits(master_json)
+    #  cache.cache_json(master_json, constants.MASTER_JSON_FILE)
+    master_json = cache.read_json(constants.MASTER_JSON_FILE)
 
     trait_counts = rarity.getTraitCounts(master_json)
     cache.cache_json(trait_counts, constants.TRAIT_COUNTS_FILE)

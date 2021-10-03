@@ -8,11 +8,20 @@ IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
 
 NO_TRAIT_KEY = "no_trait"
+NUMBER_TRAITS_KEY = "number_traits"
 TRAIT_TYPE_KEY = "trait_type"
 TRAIT_VALUE_KEY = "value"
 
+def addNumberTraits(master_json):
+    for token_json in master_json.values():
+        number_traits_attribute = {
+                TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,
+                TRAIT_VALUE_KEY: len(token_json[constants.ATTRIBUTES_KEY])
+                }
+        token_json[constants.ATTRIBUTES_KEY].append(number_traits_attribute)
+
 def initTraitTypes(master_json):
-    trait_counts = {}
+    trait_counts = { NUMBER_TRAITS_KEY: {} }
     for token_json in master_json.values():
         attributes_to_add = [traits[TRAIT_TYPE_KEY] 
                 for traits in token_json[constants.ATTRIBUTES_KEY]
@@ -34,6 +43,8 @@ def getTraitCounts(master_json):
         for attribute in token_json[constants.ATTRIBUTES_KEY]:
             token_attributes[attribute[TRAIT_TYPE_KEY]] = \
                     attribute[TRAIT_VALUE_KEY]
+        #  incrTraitValue(trait_counts, NUMBER_TRAITS_KEY,
+                #  str(len(token_attributes)))
 
         for trait_type in trait_counts:
             trait_value_incr = (token_attributes[trait_type]
