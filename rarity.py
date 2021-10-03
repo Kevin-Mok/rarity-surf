@@ -14,9 +14,15 @@ TRAIT_VALUE_KEY = "value"
 
 def addNumberTraits(master_json):
     for token_json in master_json.values():
+        attributes = token_json[constants.ATTRIBUTES_KEY]
+        num_traits = len(attributes)
+        no_traits = [attribute[TRAIT_VALUE_KEY]
+                for attribute in attributes
+                if attribute[TRAIT_VALUE_KEY].startswith("No ")]
+        num_traits -= len(no_traits)
         number_traits_attribute = {
                 TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,
-                TRAIT_VALUE_KEY: len(token_json[constants.ATTRIBUTES_KEY])
+                TRAIT_VALUE_KEY: num_traits,
                 }
         token_json[constants.ATTRIBUTES_KEY].append(number_traits_attribute)
 
