@@ -53,7 +53,8 @@
   - roles for snipes/reviews
   - referral program
     - active user
-    - both users get discount
+    - both users get 10% discount off next membership
+  - tweet about
 - discounted beta access
 - survey for user feedback
 

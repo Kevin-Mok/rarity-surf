@@ -1,4 +1,4 @@
-from constants import CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
+from constants import ATTRIBUTES_KEY, CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
 from web3_api import getTokenMetadata
 
 import json 
@@ -23,7 +23,7 @@ def cacheTokenMetadataThreadedHelper(cached_tokens, startTokenNum, endTokenNum, 
         if str(tokenNum) not in cached_tokens:
             tokenMetadata = getTokenMetadata(tokenNum)
             #  print(f"Thread #{threadNum}: Checking token #{tokenNum} for attributes.")
-            if constants.ATTRIBUTES_KEY in tokenMetadata:
+            if ATTRIBUTES_KEY in tokenMetadata:
                 with open(f"{RAW_CACHE_DIR}/{tokenNum}.json", 'w') as out:
                     print(f"Thread #{threadNum}: Caching Token #{tokenNum} to {out.name}.")
                     json.dump(tokenMetadata, out, indent=2)

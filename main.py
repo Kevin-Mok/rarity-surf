@@ -32,9 +32,10 @@ if __name__ == "__main__":
 
     # step 1: cache metadata
     #  cache.cacheTokenMetadataThreaded(1, 5, 1)
+    #  cache.cacheTokenMetadataThreaded(0, 0, 1)
 
     #  threads = ceil(constants.MAX_SUPPLY / 25)
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
 
     # step 2
-    cacheMetadataJSONS()
+    #  cacheMetadataJSONS()

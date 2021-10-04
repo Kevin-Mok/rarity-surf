@@ -20,6 +20,7 @@ API_HEADERS = {"Accept": "application/json"}
 #  MAX_LIMIT = 300
 EVENT_TYPE = "created" # listings
 MAX_LIMIT = 50
+ASSETS_MAX_LIMIT = 30
 LISTINGS_MAX_LIMIT = 50
 
 #  MAX_LIMIT = 5 # tesing
@@ -28,10 +29,9 @@ SALES_DIR = f"{constants.CACHE_DIR}/sales"
 MASTER_SALES_FILE = f"{SALES_DIR}/master-os-sales.json"
 MASTER_SALES_SUMMARY_FILE = f"{SALES_DIR}/master-os-sales-summary.json"
 
-# master sales keys
-#  RANK_KEY = "rank"
+DETAIL_KEY = "detail"
+THROTTLED_MSG = "Request was throttled."
 TIMESTAMP_KEY = "timestamp"
-#  TOKEN_ID_KEY = "token_id"
 ETH_KEY = "eth"
 
 def getAssetsAPI(token_id_list):
@@ -39,11 +39,11 @@ def getAssetsAPI(token_id_list):
             "asset_contract_address": constants.CONTRACT_ADDRESS,
             "token_ids": token_id_list,
             #  "order_by": "listing_date",
-            "limit": MAX_LIMIT}
+            "limit": ASSETS_MAX_LIMIT}
     api_request = requests.request("GET", ASSETS_API,
             headers=API_HEADERS, params=querystring)
     #  pprint(api_request)
-    return json.loads(api_request.text)
+    return json.loads(api_request.text)["assets"]
 
 def getSalesData(page):
     print(f"Fetching page {page} of events.")
@@ -60,9 +60,6 @@ def getSalesData(page):
 
 def getEventsList(json):
     return json["asset_events"]
-
-def getAssetsList(json):
-    return json["assets"]
 
 def getEth(eth):
     return float(f"{int(eth) * (10 ** -18):.2f}")
@@ -133,8 +130,9 @@ def getFilteredListings(listings):
         eth = getEth(listing["starting_price"])
         if listing['asset']:
             token_id = listing['asset']['token_id']
-            if (token_id not in filtered_listings and
-                    token_id in ranks):
+            #  if (token_id not in filtered_listings and
+                    #  token_id in ranks):
+            if token_id in ranks:
                 rank = ranks[token_id]['rank']
                 if (listing["auction_type"] == "dutch" and 
                         eth <= constants.ETH_FILTER and
@@ -143,19 +141,23 @@ def getFilteredListings(listings):
                             constants.RANK_KEY: rank,
                             ETH_KEY: eth,
                             }
+    #  pprint(filtered_listings)
     return filtered_listings
-    
+
+def getAllAssets(token_ids):
+    master_assets = []
+    for i in range(0, len(token_ids), ASSETS_MAX_LIMIT):
+        master_assets += getAssetsAPI(token_ids[i:i + ASSETS_MAX_LIMIT])
+    return master_assets
+
 def checkIfStillListed(listings):
-    token_ids = list(listings.keys())[:30]
-    assets = getAssetsAPI(token_ids)
+    assets = getAllAssets(list(listings.keys()))
     cache.cache_json(assets, constants.ASSETS_FILE)
-    #  pprint(assets)
     listed_assets = []
-    for asset in getAssetsList(assets):
+    for asset in assets:
         if asset["sell_orders"]:
             raw_cur_price = asset["sell_orders"][0]["current_price"]
             cur_price = getEth(raw_cur_price.split(".", 1)[0])
-                    #  asset["sell_orders"][0]["current_bounty"])
             if cur_price <= constants.ETH_FILTER:
                 listings[asset["token_id"]][ETH_KEY] = cur_price
                 listed_assets.append(asset["token_id"])
