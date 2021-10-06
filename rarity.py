@@ -18,7 +18,8 @@ def addNumberTraits(master_json):
         num_traits = len(attributes)
         no_traits = [attribute[TRAIT_VALUE_KEY]
                 for attribute in attributes
-                if attribute[TRAIT_VALUE_KEY].startswith("No ")]
+                #  if attribute[TRAIT_VALUE_KEY].startswith("No ")]
+                if attribute[TRAIT_VALUE_KEY] == "Nothing"]
         num_traits -= len(no_traits)
         number_traits_attribute = {
                 TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,

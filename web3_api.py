@@ -10,7 +10,8 @@ WEB3_HTTP_PROVIDER = 'https://mainnet.infura.io/v3/a57b116ee7a845a2ba0ee902a5280
 INFURA_IPFS_PROJECT_ID = '1y5NJcmgstcJZ3CtveqhljSS3Tu'
 INFURA_IPFS_PROJECT_SECRET = 'e02e9b9473b5e5198ba9be4400592182'
 
-API_URL = "https://api.uwucrew.art/api/uwu"
+#  API_URL = "https://api.uwucrew.art/api/uwu"
+API_URL = "https://mbdnfts.s3.eu-west-1.amazonaws.com"
 REQUEST_HEADERS = {'User-Agent': 'Mozilla/5.0'}
 
 def getABI(contract_address):
@@ -36,11 +37,11 @@ def getTokenURI(contract, tokenId):
 def getTokenMetadata(tokenNum):
     #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
     #  return json.loads(getIPFSResponse(ipfsHash).text)
-    return json.loads(
-            getIPFSResponse(f"{constants.IPFS_HASH}/{tokenNum}").text)
+    #  return json.loads(
+            #  getIPFSResponse(f"{constants.IPFS_HASH}/{tokenNum}").text)
 
-    #  req = Request(f"{API_URL}/{tokenNum}", headers=REQUEST_HEADERS)
-    #  return json.loads(urlopen(req).read().decode())
+    req = Request(f"{API_URL}/{tokenNum}.json", headers=REQUEST_HEADERS)
+    return json.loads(urlopen(req).read().decode())
 
 def getIPFSHash(ipfsURL):
     return ipfsURL.removeprefix('ipfs://')

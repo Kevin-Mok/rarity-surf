@@ -38,4 +38,4 @@ if __name__ == "__main__":
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
 
     # step 2
-    #  cacheMetadataJSONS()
+    cacheMetadataJSONS()

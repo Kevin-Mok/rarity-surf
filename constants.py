@@ -7,6 +7,19 @@
 
 #  }}} 7s # 
 
+#  {{{ bears # 
+
+#  CACHE_DIR = "./data/bears"
+#  CONTRACT_ADDRESS = '0x984eea281bf65638ac6ed30c4ff7977ea7fe0433'
+#  IPFS_HASH = "QmStJMU7iNEJCn1cXsQHqHtNexiUwFJpSRWN5UDgpDy32x"
+#  MAX_SUPPLY = 5000
+
+#  TOTAL_LISTED = 400
+#  ETH_FILTER = .5
+#  RANK_FILTER = 1000
+
+#  }}} bears # 
+
 #  {{{ bunker beasts # 
 
 #  CACHE_DIR = "./data/beasts"
@@ -35,16 +48,29 @@
 
 #  }}} capsule # 
 
-#  {{{ gorilla nemesis # 
+#  {{{ dragons # 
 
-CACHE_DIR = "./data/gorilla"
-CONTRACT_ADDRESS = '0x984eea281bf65638ac6ed30c4ff7977ea7fe0433'
-IPFS_HASH = "QmStJMU7iNEJCn1cXsQHqHtNexiUwFJpSRWN5UDgpDy32x"
+CACHE_DIR = "./data/dragons"
+CONTRACT_ADDRESS = '0x6fecaa110f74c8181e4a90285b1065be32596c9d'
 MAX_SUPPLY = 5000
 
-TOTAL_LISTED = 400
-ETH_FILTER = .5
+#  TOTAL_LISTED = 2700
+TOTAL_LISTED = 300
+ETH_FILTER = .1
 RANK_FILTER = 1000
+
+#  }}} bears # 
+
+#  {{{ gorilla nemesis # 
+
+#  CACHE_DIR = "./data/gorilla"
+#  CONTRACT_ADDRESS = '0x984eea281bf65638ac6ed30c4ff7977ea7fe0433'
+#  IPFS_HASH = "QmStJMU7iNEJCn1cXsQHqHtNexiUwFJpSRWN5UDgpDy32x"
+#  MAX_SUPPLY = 5000
+
+#  TOTAL_LISTED = 400
+#  ETH_FILTER = .5
+#  RANK_FILTER = 1000
 
 #  }}} gorilla nemesis # 
 
