@@ -1,6 +1,6 @@
 #  {{{ 7s # 
 
-#  CACHE_DIR = "./data/sevens"
+CACHE_DIR = "./data/sevens"
 #  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
 #  MAX_SUPPLY = 7000
@@ -50,14 +50,14 @@
 
 #  {{{ dragons # 
 
-CACHE_DIR = "./data/dragons"
-CONTRACT_ADDRESS = '0x6fecaa110f74c8181e4a90285b1065be32596c9d'
-MAX_SUPPLY = 5000
+#  CACHE_DIR = "./data/dragons"
+#  CONTRACT_ADDRESS = '0x6fecaa110f74c8181e4a90285b1065be32596c9d'
+#  MAX_SUPPLY = 5000
 
-#  TOTAL_LISTED = 2700
-TOTAL_LISTED = 300
-ETH_FILTER = .1
-RANK_FILTER = 1000
+#  #  TOTAL_LISTED = 2700
+#  TOTAL_LISTED = 300
+#  ETH_FILTER = .1
+#  RANK_FILTER = 1000
 
 #  }}} bears # 
 
@@ -149,5 +149,6 @@ RARE_TRAITS_FILE = f"{CACHE_DIR}/rare-traits.json"
 SCORES_FILE = f"{CACHE_DIR}/scores.json"
 SORTED_RANKS_FILE = f"{CACHE_DIR}/sorted-ranks.json"
 TRAIT_COUNTS_FILE = f"{CACHE_DIR}/trait-counts.json"
+TOOLS_RANKS_FILE = f"{CACHE_DIR}/tools-ranks.json"
 
 OPENSEA_API_KEY = "2f6f419a083c46de9d83ce3dbe7db601"
