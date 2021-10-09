@@ -12,6 +12,7 @@ DISCREPANCY_KEY = "discrepancy"
 DISCREPANCY_PERCENTAGE_KEY = "discrepancy_percentage"
 NO_TRAIT_KEY = "no_trait"
 NUMBER_TRAITS_KEY = "number_traits"
+TOOLS_RANK_KEY = "tools_rank"
 TRAIT_TYPE_KEY = "trait_type"
 TRAIT_VALUE_KEY = "value"
 
@@ -174,21 +175,29 @@ def getAllDiscrepanciesDict():
         discrepancy = abs(my_rank - tools_rank)
         discrepancies[token_id] = {
                 "my_rank": my_rank,
-                "tools_rank": tools_rank,
+                TOOLS_RANK_KEY: tools_rank,
                 DISCREPANCY_KEY: discrepancy,
                 DISCREPANCY_PERCENTAGE_KEY: discrepancy / tools_rank,
                 }
     return discrepancies
 
-def getAvgDiscrepancies():
+def getAvgDiscrepancies(max_rank=constants.MAX_SUPPLY):
+    # initialize values
     all_discrepancies_dicts = getAllDiscrepanciesDict().values()
-    all_discrepancies = [discrepancy_dict[DISCREPANCY_KEY]
-            for discrepancy_dict in all_discrepancies_dicts]
-    all_discrepancy_percentages = [discrepancy_dict[DISCREPANCY_PERCENTAGE_KEY]
-            for discrepancy_dict in all_discrepancies_dicts]
+    all_discrepancies = []
+    all_discrepancy_percentages = []
+    # filter discrepancies_dicts under max_rank
+    filtered_discrepancies_dicts = [discrepancy_dict 
+            for discrepancy_dict in all_discrepancies_dicts
+            if discrepancy_dict[TOOLS_RANK_KEY] <= max_rank]
+    # add values to dicts
+    for discrepancy_dict in filtered_discrepancies_dicts:
+        all_discrepancies.append(discrepancy_dict[DISCREPANCY_KEY])
+        all_discrepancy_percentages.append(
+                discrepancy_dict[DISCREPANCY_PERCENTAGE_KEY])
     avg_discrepancy_percentage = mean(all_discrepancy_percentages) * 100
     print(f"Avg. Discrepancy: {mean(all_discrepancies)}")
-    print(f"Avg. Discrepancy %: {avg_discrepancy_percentage:2f}%")
+    print(f"Avg. Discrepancy %: {avg_discrepancy_percentage:2f}")
 
 def convertToolsRanks():
     """Convert rarity.tools ranks to by token ID.
@@ -199,4 +208,4 @@ def convertToolsRanks():
     
 if __name__ == "__main__":
     #  interactiveRankSearch()
-    getAvgDiscrepancies()
+    getAvgDiscrepancies(500)
