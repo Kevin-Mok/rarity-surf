@@ -3,7 +3,7 @@
 CACHE_DIR = "./data/sevens"
 #  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
-#  MAX_SUPPLY = 7000
+MAX_SUPPLY = 7000
 
 #  }}} 7s # 
 
@@ -141,6 +141,7 @@ RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
 
 # file names
 ASSETS_FILE = f"{CACHE_DIR}/assets.json"
+DISCREPANCIES_FILE = f"{CACHE_DIR}/discrepancies.json"
 LISTINGS_FILE = f"{CACHE_DIR}/listings.json"
 FILTERED_LISTINGS_FILE = f"{CACHE_DIR}/filtered-listings.json"
 MASTER_JSON_FILE = f"{CACHE_DIR}/master.json"

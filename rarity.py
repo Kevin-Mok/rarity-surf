@@ -3,10 +3,13 @@ import constants
 import web3_api
 
 from pprint import pprint
+from statistics import mean
 
 IPFS_URL = "https://ipfs.io/ipfs"
 OS_ASSETS_URL = "https://opensea.io/assets"
 
+DISCREPANCY_KEY = "discrepancy"
+DISCREPANCY_PERCENTAGE_KEY = "discrepancy_percentage"
 NO_TRAIT_KEY = "no_trait"
 NUMBER_TRAITS_KEY = "number_traits"
 TRAIT_TYPE_KEY = "trait_type"
@@ -158,9 +161,42 @@ def interactiveRankSearch():
         else:
             print("Token # not found.")
 
-if __name__ == "__main__":
-    #  master_json = cache.initMasterJSON()
-    #  #  pprint(initTraitTypes(master_json))
-    #  pprint(getTraitCounts(master_json))
+def getAllDiscrepanciesDict():
+    """Compare own ranks with rarity.tools ranks.
+    """
+    my_ranks = cache.read_json(constants.RANKS_FILE)
+    tools_ranks = convertToolsRanks()
+    discrepancies = {}
+    for token_id in range(constants.MAX_SUPPLY):
+        token_id_str = str(token_id)
+        my_rank = int(my_ranks[token_id_str][constants.RANK_KEY])
+        tools_rank = int(tools_ranks[token_id_str])
+        discrepancy = abs(my_rank - tools_rank)
+        discrepancies[token_id] = {
+                "my_rank": my_rank,
+                "tools_rank": tools_rank,
+                DISCREPANCY_KEY: discrepancy,
+                DISCREPANCY_PERCENTAGE_KEY: discrepancy / tools_rank,
+                }
+    return discrepancies
 
-    interactiveRankSearch()
+def getAvgDiscrepancies():
+    all_discrepancies_dicts = getAllDiscrepanciesDict().values()
+    all_discrepancies = [discrepancy_dict[DISCREPANCY_KEY]
+            for discrepancy_dict in all_discrepancies_dicts]
+    all_discrepancy_percentages = [discrepancy_dict[DISCREPANCY_PERCENTAGE_KEY]
+            for discrepancy_dict in all_discrepancies_dicts]
+    avg_discrepancy_percentage = mean(all_discrepancy_percentages) * 100
+    print(f"Avg. Discrepancy: {mean(all_discrepancies)}")
+    print(f"Avg. Discrepancy %: {avg_discrepancy_percentage:2f}%")
+
+def convertToolsRanks():
+    """Convert rarity.tools ranks to by token ID.
+    """
+    tools_ranks = cache.read_json(constants.TOOLS_RANKS_FILE)
+    return {token_id: rank for (rank, token_id) 
+            in tools_ranks.items()}
+    
+if __name__ == "__main__":
+    #  interactiveRankSearch()
+    getAvgDiscrepancies()
