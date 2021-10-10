@@ -7,10 +7,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from sys import argv
 from time import sleep
 
 TOOLS_URL = "https://rarity.tools"
-COLLECTION_NAME = f"the-sevens-official"
+#  COLLECTION_NAME = "the-sevens-official"
+#  COLLECTION_NAME = "mightybabydragons"
+COLLECTION_NAME = "0n1-force"
 COLLECTION_URL = f"{TOOLS_URL}/{COLLECTION_NAME}"
 
 INITIAL_SLEEP = 10
@@ -52,11 +55,6 @@ def updateRankDict(rank_dict, rank_box_div):
         rank_dict[rank] = getTokenID(raw_token_id)
 
 def nextPage(driver, page):
-    #  small_buttons = driver.find_elements_by_class_name("smallBtn")
-    #  for small_button in small_buttons:
-        #  if small_button.text == "Next >":
-            #  #  small_button.click()
-            #  pass
     page_div = driver.find_element_by_class_name("smallNoBtn")
     page_input = page_div.find_element_by_class_name("textInput")
     page_input.clear()
@@ -98,11 +96,7 @@ def cleanTokenIDs():
         rank_dict[rank] = getTokenID(token_id)
 
 if __name__ == "__main__":
-    #  link = "https://rarity.tools/the-sevens-official"
-    #  link = "https://rarity.tools/the-sevens-official?filters=%24minRank%2449%3Atrue"
-    #  link = "file:///home/kevin/tmp/7s-rarity.tools.html"
-
     rank_dict = loadRankDict()
     driver = getDriver(getToolsPageAtRank(
         len(rank_dict) + 1))
-    updateRankDictMult(driver, rank_dict, 1)
+    updateRankDictMult(driver, rank_dict, int(argv[1]))

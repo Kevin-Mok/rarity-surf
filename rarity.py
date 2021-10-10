@@ -16,14 +16,20 @@ TOOLS_RANK_KEY = "tools_rank"
 TRAIT_TYPE_KEY = "trait_type"
 TRAIT_VALUE_KEY = "value"
 
+def checkNothingTrait(trait_value):
+    return (str(trait_value).startswith("No ") or
+            trait_value == "Nothing")
+
 def addNumberTraits(master_json):
     for token_json in master_json.values():
-        attributes = token_json[constants.ATTRIBUTES_KEY]
+        #  attributes = token_json[constants.ATTRIBUTES_KEY]
+        attributes = [attribute 
+                for attribute in token_json[constants.ATTRIBUTES_KEY]
+                if attribute[TRAIT_TYPE_KEY] not in constants.IGNORED_TRAIT_TYPES]
         num_traits = len(attributes)
         no_traits = [attribute[TRAIT_VALUE_KEY]
                 for attribute in attributes
-                #  if attribute[TRAIT_VALUE_KEY].startswith("No ")]
-                if attribute[TRAIT_VALUE_KEY] == "Nothing"]
+                if checkNothingTrait(attribute[TRAIT_VALUE_KEY])]
         num_traits -= len(no_traits)
         number_traits_attribute = {
                 TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,
@@ -47,6 +53,11 @@ def incrTraitValue(trait_counts, trait_type, trait_value):
     else:
         trait_counts[trait_type][trait_value] = 1
 
+def getEquivalentTrait(trait_value):
+    if trait_value == "No Aura Plain":
+        return "No Aura"
+    return trait_value
+
 def getTraitCounts(master_json):
     trait_counts = initTraitTypes(master_json)
     for token_json in master_json.values():
@@ -58,7 +69,8 @@ def getTraitCounts(master_json):
                 #  str(len(token_attributes)))
 
         for trait_type in trait_counts:
-            trait_value_incr = (token_attributes[trait_type]
+            trait_value_incr = getEquivalentTrait(
+                    token_attributes[trait_type]
                     if trait_type in token_attributes
                     else NO_TRAIT_KEY)
             incrTraitValue(trait_counts, trait_type, trait_value_incr)
@@ -75,8 +87,12 @@ def calcRarestTraits(master_json, trait_counts):
 def calcTraitScore(trait_count, num_trait_values):
     # from rarity.tools article + trait normalization
     # https://raritytools.medium.com/ranking-rarity-understanding-rarity-calculation-methods-86ceaeb9b98c
-    return (1 / trait_count / constants.MAX_SUPPLY /
-            num_trait_values * (10 ** 8))
+    base_score_multiplier = 3 / 5
+    #  base_score = (1 / trait_count / constants.MAX_SUPPLY /
+            #  num_trait_values * (10 ** 9) * base_score_multiplier)
+    base_score = round(1 / trait_count / constants.MAX_SUPPLY /
+            num_trait_values * (10 ** 9) * base_score_multiplier, 2)
+    return base_score
 
 def calcTraitScores(master_json, trait_counts):
     trait_scores = initTraitTypes(master_json)
@@ -90,8 +106,10 @@ def calcTraitScores(master_json, trait_counts):
 def calcTokenScore(master_json, trait_scores, token_num):
     token_score = 0
     for attribute in master_json[token_num][constants.ATTRIBUTES_KEY]:
-        token_score += \
-                trait_scores[attribute[TRAIT_TYPE_KEY]][attribute[TRAIT_VALUE_KEY]]
+        if attribute[TRAIT_TYPE_KEY] not in constants.IGNORED_TRAIT_TYPES:
+            trait_value = getEquivalentTrait(attribute[TRAIT_VALUE_KEY])
+            token_score += \
+                    trait_scores[attribute[TRAIT_TYPE_KEY]][trait_value]
     return token_score
 
 def formatPercentage(percentage):
@@ -100,10 +118,11 @@ def formatPercentage(percentage):
 def getRarestAttributes(rarest_traits, attributes):
     attribute_rarities = []
     for attribute in attributes:
-        rarity_percentage = rarest_traits[attribute[TRAIT_TYPE_KEY]][attribute[TRAIT_VALUE_KEY]]
+        trait_value = getEquivalentTrait(attribute[TRAIT_VALUE_KEY])
+        rarity_percentage = rarest_traits[attribute[TRAIT_TYPE_KEY]][trait_value]
         attribute_rarities.append({
                 TRAIT_TYPE_KEY: attribute[TRAIT_TYPE_KEY],
-                "trait": attribute[TRAIT_VALUE_KEY],
+                "trait": trait_value,
                 "rarity": rarity_percentage,
                 })
 
@@ -168,7 +187,8 @@ def getAllDiscrepanciesDict():
     my_ranks = cache.read_json(constants.RANKS_FILE)
     tools_ranks = convertToolsRanks()
     discrepancies = {}
-    for token_id in range(constants.MAX_SUPPLY):
+    #  for token_id in range(constants.MAX_SUPPLY):
+    for token_id in range(1, constants.MAX_SUPPLY + 1):
         token_id_str = str(token_id)
         my_rank = int(my_ranks[token_id_str][constants.RANK_KEY])
         tools_rank = int(tools_ranks[token_id_str])
@@ -203,9 +223,11 @@ def convertToolsRanks():
     """Convert rarity.tools ranks to by token ID.
     """
     tools_ranks = cache.read_json(constants.TOOLS_RANKS_FILE)
-    return {token_id: rank for (rank, token_id) 
+    return {token_id.lstrip("0"): rank for (rank, token_id) 
             in tools_ranks.items()}
     
 if __name__ == "__main__":
     #  interactiveRankSearch()
-    getAvgDiscrepancies(500)
+    #  getAvgDiscrepancies(250)
+    getAvgDiscrepancies()
+    #  pprint(getAllDiscrepanciesDict())

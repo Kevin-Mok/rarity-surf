@@ -1,9 +1,19 @@
+#  {{{ 0n1 # 
+
+CACHE_DIR = "./data/0n1"
+CONTRACT_ADDRESS = '0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d'
+IGNORED_TRAIT_TYPES = ["Style", "Strength", "Spirit"]
+IPFS_HASH = "QmXgSuLPGuxxRuAana7JdoWmaS25oAcXv3x2pYMN9kVfg3"
+MAX_SUPPLY = 7777
+
+#  }}} 0n1 # 
+
 #  {{{ 7s # 
 
-CACHE_DIR = "./data/sevens"
+#  CACHE_DIR = "./data/sevens"
 #  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
 #  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
-MAX_SUPPLY = 7000
+#  MAX_SUPPLY = 7000
 
 #  }}} 7s # 
 
@@ -59,7 +69,7 @@ MAX_SUPPLY = 7000
 #  ETH_FILTER = .1
 #  RANK_FILTER = 1000
 
-#  }}} bears # 
+#  }}} dragons # 
 
 #  {{{ gorilla nemesis # 
 
@@ -114,8 +124,6 @@ MAX_SUPPLY = 7000
 #  RANK_FILTER = 700
 
 #  }}} obits # 
-
-#  7s {{{ # 
 
 #  seals {{{ # 
 

@@ -2,6 +2,7 @@ import constants
 
 import json 
 import requests
+from requests.exceptions import ConnectionError
 from urllib.request import Request, urlopen
 from web3 import Web3
 
@@ -35,23 +36,32 @@ def getTokenURI(contract, tokenId):
 
 #  def getTokenMetadata(contract, tokenNum):
 def getTokenMetadata(tokenNum):
+    # get from contract
     #  ipfsHash = getIPFSHash(getTokenURI(contract, tokenNum))
     #  return json.loads(getIPFSResponse(ipfsHash).text)
-    #  return json.loads(
-            #  getIPFSResponse(f"{constants.IPFS_HASH}/{tokenNum}").text)
 
-    req = Request(f"{API_URL}/{tokenNum}.json", headers=REQUEST_HEADERS)
-    return json.loads(urlopen(req).read().decode())
+    # manual IPFS URL
+    return json.loads(
+            getIPFSResponse(f"{constants.IPFS_HASH}/{tokenNum}").text)
+
+    # HTTP metadata
+    #  req = Request(f"{API_URL}/{tokenNum}.json", headers=REQUEST_HEADERS)
+    #  return json.loads(urlopen(req).read().decode())
 
 def getIPFSHash(ipfsURL):
     return ipfsURL.removeprefix('ipfs://')
 
 def getIPFSResponse(ipfsHash):
     params = (('arg',ipfsHash),)
-    return requests.post(
-            'https://ipfs.infura.io:5001/api/v0/cat',
-            params=params,
-            auth=(INFURA_IPFS_PROJECT_ID, INFURA_IPFS_PROJECT_SECRET))
+    # wait for valid IPFS response
+    while True:
+        try:
+            return requests.post(
+                    'https://ipfs.infura.io:5001/api/v0/cat',
+                    params=params,
+                    auth=(INFURA_IPFS_PROJECT_ID, INFURA_IPFS_PROJECT_SECRET))
+        except ConnectionError:
+            continue
 
 def downloadIPFSImage(imageIPFSHash, imagePath):
     """

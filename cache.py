@@ -99,7 +99,6 @@ def initMasterJSON():
     master_json = {}
     for file_name in getRawCacheFiles():
         with open(join(RAW_CACHE_DIR, file_name)) as json_file:
-            #  master_json[file_name.removesuffix('.json')] = json.load(json_file)
             master_json[stripJSONSuffix(file_name)] = json.load(json_file)
     return master_json
 
