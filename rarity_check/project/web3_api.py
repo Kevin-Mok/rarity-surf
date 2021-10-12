@@ -1,4 +1,4 @@
-import constants
+import project.constants
 
 import json 
 import requests

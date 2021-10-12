@@ -13,8 +13,8 @@ DISCREPANCY_PERCENTAGE_KEY = "discrepancy_percentage"
 NO_TRAIT_KEY = "no_trait"
 NUMBER_TRAITS_KEY = "number_traits"
 TOOLS_RANK_KEY = "tools_rank"
-TRAIT_TYPE_KEY = "trait_type"
-TRAIT_VALUE_KEY = "value"
+#  TRAIT_TYPE_KEY = "trait_type"
+#  TRAIT_VALUE_KEY = "value"
 
 def checkNothingTrait(trait_value):
     return (str(trait_value).startswith("No ") or
@@ -25,24 +25,25 @@ def addNumberTraits(master_json):
         #  attributes = token_json[constants.ATTRIBUTES_KEY]
         attributes = [attribute 
                 for attribute in token_json[constants.ATTRIBUTES_KEY]
-                if attribute[TRAIT_TYPE_KEY] not in constants.IGNORED_TRAIT_TYPES]
+                if attribute[constants.TRAIT_TYPE_KEY] 
+                not in constants.IGNORED_TRAIT_TYPES]
         num_traits = len(attributes)
-        no_traits = [attribute[TRAIT_VALUE_KEY]
+        no_traits = [attribute[constants.TRAIT_VALUE_KEY]
                 for attribute in attributes
-                if checkNothingTrait(attribute[TRAIT_VALUE_KEY])]
+                if checkNothingTrait(attribute[constants.TRAIT_VALUE_KEY])]
         num_traits -= len(no_traits)
         number_traits_attribute = {
-                TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,
-                TRAIT_VALUE_KEY: num_traits,
+                constants.TRAIT_TYPE_KEY: NUMBER_TRAITS_KEY,
+                constants.TRAIT_VALUE_KEY: num_traits,
                 }
         token_json[constants.ATTRIBUTES_KEY].append(number_traits_attribute)
 
 def initTraitTypes(master_json):
     trait_counts = { NUMBER_TRAITS_KEY: {} }
     for token_json in master_json.values():
-        attributes_to_add = [traits[TRAIT_TYPE_KEY] 
+        attributes_to_add = [traits[constants.TRAIT_TYPE_KEY] 
                 for traits in token_json[constants.ATTRIBUTES_KEY]
-                if traits[TRAIT_TYPE_KEY] not in trait_counts]
+                if traits[constants.TRAIT_TYPE_KEY] not in trait_counts]
         for attribute in attributes_to_add:
             trait_counts[attribute] = {}
     return trait_counts
@@ -63,8 +64,8 @@ def getTraitCounts(master_json):
     for token_json in master_json.values():
         token_attributes = {}
         for attribute in token_json[constants.ATTRIBUTES_KEY]:
-            token_attributes[attribute[TRAIT_TYPE_KEY]] = \
-                    attribute[TRAIT_VALUE_KEY]
+            token_attributes[attribute[constants.TRAIT_TYPE_KEY]] = \
+                    attribute[constants.TRAIT_VALUE_KEY]
         #  incrTraitValue(trait_counts, NUMBER_TRAITS_KEY,
                 #  str(len(token_attributes)))
 
@@ -106,10 +107,11 @@ def calcTraitScores(master_json, trait_counts):
 def calcTokenScore(master_json, trait_scores, token_num):
     token_score = 0
     for attribute in master_json[token_num][constants.ATTRIBUTES_KEY]:
-        if attribute[TRAIT_TYPE_KEY] not in constants.IGNORED_TRAIT_TYPES:
-            trait_value = getEquivalentTrait(attribute[TRAIT_VALUE_KEY])
+        if (attribute[constants.TRAIT_TYPE_KEY]
+                not in constants.IGNORED_TRAIT_TYPES):
+            trait_value = getEquivalentTrait(attribute[constants.TRAIT_VALUE_KEY])
             token_score += \
-                    trait_scores[attribute[TRAIT_TYPE_KEY]][trait_value]
+                    trait_scores[attribute[constants.TRAIT_TYPE_KEY]][trait_value]
     return token_score
 
 def formatPercentage(percentage):
@@ -118,10 +120,11 @@ def formatPercentage(percentage):
 def getRarestAttributes(rarest_traits, attributes):
     attribute_rarities = []
     for attribute in attributes:
-        trait_value = getEquivalentTrait(attribute[TRAIT_VALUE_KEY])
-        rarity_percentage = rarest_traits[attribute[TRAIT_TYPE_KEY]][trait_value]
+        trait_value = getEquivalentTrait(attribute[constants.TRAIT_VALUE_KEY])
+        rarity_percentage = rarest_traits[
+                attribute[constants.TRAIT_TYPE_KEY]][trait_value]
         attribute_rarities.append({
-                TRAIT_TYPE_KEY: attribute[TRAIT_TYPE_KEY],
+                constants.TRAIT_TYPE_KEY: attribute[constants.TRAIT_TYPE_KEY],
                 "trait": trait_value,
                 "rarity": rarity_percentage,
                 })

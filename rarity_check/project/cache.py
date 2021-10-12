@@ -1,5 +1,5 @@
-from constants import ATTRIBUTES_KEY, CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
-from web3_api import getTokenMetadata
+from project.constants import ATTRIBUTES_KEY, CACHE_DIR, RAW_CACHE_DIR, MASTER_JSON_FILE
+from project.web3_api import getTokenMetadata
 
 import json 
 from math import floor

@@ -1,8 +1,8 @@
 import cache
 import constants
-from math import ceil 
 import rarity
 
+from math import ceil 
 from pprint import pprint
 from web3_api import getContract, getIPFSHash, getTokenMetadata, getTokenURI
 
@@ -39,4 +39,4 @@ if __name__ == "__main__":
     #  cache.cacheTokenMetadataThreaded(1, constants.MAX_SUPPLY, threads)
 
     # step 2
-    cacheMetadataJSONS()
+    #  cacheMetadataJSONS()
