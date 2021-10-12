@@ -1,6 +1,7 @@
-import cache
-import constants
-import web3_api
+import project.cache as cache
+import project.constants as constants
+from .models import Project, TraitType, TraitValue, Token
+import project.web3_api as web3_api
 
 from pprint import pprint
 from statistics import mean
@@ -76,6 +77,26 @@ def getTraitCounts(master_json):
                     else NO_TRAIT_KEY)
             incrTraitValue(trait_counts, trait_type, trait_value_incr)
     return trait_counts
+
+def addTraitCounts(project):
+    pprint(Token.objects.filter(traits__name=))
+
+    #  trait_counts = initTraitTypes(master_json)
+    #  for token_json in master_json.values():
+        #  token_attributes = {}
+        #  for attribute in token_json[constants.ATTRIBUTES_KEY]:
+            #  token_attributes[attribute[constants.TRAIT_TYPE_KEY]] = \
+                    #  attribute[constants.TRAIT_VALUE_KEY]
+        #  #  incrTraitValue(trait_counts, NUMBER_TRAITS_KEY,
+                #  #  str(len(token_attributes)))
+
+        #  for trait_type in trait_counts:
+            #  trait_value_incr = getEquivalentTrait(
+                    #  token_attributes[trait_type]
+                    #  if trait_type in token_attributes
+                    #  else NO_TRAIT_KEY)
+            #  incrTraitValue(trait_counts, trait_type, trait_value_incr)
+    #  return trait_counts
 
 def calcRarestTraits(master_json, trait_counts):
     trait_percentages = initTraitTypes(master_json)
