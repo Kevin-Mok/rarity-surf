@@ -1,5 +1,6 @@
 import project.cache as cache
 import project.constants as constants
+import project.get_obj as get_obj
 from .models import Project, TraitType, TraitValue, Token
 import project.web3_api as web3_api
 
@@ -67,8 +68,6 @@ def getTraitCounts(master_json):
         for attribute in token_json[constants.ATTRIBUTES_KEY]:
             token_attributes[attribute[constants.TRAIT_TYPE_KEY]] = \
                     attribute[constants.TRAIT_VALUE_KEY]
-        #  incrTraitValue(trait_counts, NUMBER_TRAITS_KEY,
-                #  str(len(token_attributes)))
 
         for trait_type in trait_counts:
             trait_value_incr = getEquivalentTrait(
@@ -79,24 +78,11 @@ def getTraitCounts(master_json):
     return trait_counts
 
 def addTraitCounts(project):
-    pprint(Token.objects.filter(traits__name=))
-
-    #  trait_counts = initTraitTypes(master_json)
-    #  for token_json in master_json.values():
-        #  token_attributes = {}
-        #  for attribute in token_json[constants.ATTRIBUTES_KEY]:
-            #  token_attributes[attribute[constants.TRAIT_TYPE_KEY]] = \
-                    #  attribute[constants.TRAIT_VALUE_KEY]
-        #  #  incrTraitValue(trait_counts, NUMBER_TRAITS_KEY,
-                #  #  str(len(token_attributes)))
-
-        #  for trait_type in trait_counts:
-            #  trait_value_incr = getEquivalentTrait(
-                    #  token_attributes[trait_type]
-                    #  if trait_type in token_attributes
-                    #  else NO_TRAIT_KEY)
-            #  incrTraitValue(trait_counts, trait_type, trait_value_incr)
-    #  return trait_counts
+    for trait_type_obj in project.traittype_set.all():
+        for trait_value_obj in trait_type_obj.traitvalue_set.all():
+            trait_value_obj.count = trait_value_obj.token_set.count()
+            trait_value_obj.save()
+            print(f"Set {trait_value_obj} count to {trait_value_obj.count}.")
 
 def calcRarestTraits(master_json, trait_counts):
     trait_percentages = initTraitTypes(master_json)

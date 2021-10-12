@@ -9,4 +9,5 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         project = Project.objects.get(
                 contract_address=constants.CONTRACT_ADDRESS)
+        #  rarity.addTraitCount(project, "Aura", "Celestial")
         rarity.addTraitCounts(project)

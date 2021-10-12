@@ -39,13 +39,13 @@ def get_trait_value_obj(trait_type_obj, trait_value):
         #  print(f"Existing trait value {trait_value_obj}.")
     return trait_value_obj
 
-def get_trait_objs(project, trait):
+def get_trait_objs(project, trait_json):
     """Create or retrieve trait type/value objects.
     """
-    trait_type = trait[constants.TRAIT_TYPE_KEY]
+    trait_type = trait_json[constants.TRAIT_TYPE_KEY]
     trait_type_obj = get_trait_type_obj(project, trait_type)
     trait_value_obj = get_trait_value_obj(
-            trait_type_obj, trait[constants.TRAIT_VALUE_KEY])
+            trait_type_obj, trait_json[constants.TRAIT_VALUE_KEY])
     return trait_type_obj, trait_value_obj
 
 def get_image_url(image_url):
