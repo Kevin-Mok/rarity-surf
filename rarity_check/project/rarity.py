@@ -77,12 +77,22 @@ def getTraitCounts(master_json):
             incrTraitValue(trait_counts, trait_type, trait_value_incr)
     return trait_counts
 
-def addTraitCounts(project):
+def addTraitValueStats(project):
     for trait_type_obj in project.traittype_set.all():
-        for trait_value_obj in trait_type_obj.traitvalue_set.all():
+        all_trait_values = trait_type_obj.traitvalue_set.all()
+        #  print(trait_type_obj, len(all_trait_values))
+        for trait_value_obj in all_trait_values:
             trait_value_obj.count = trait_value_obj.token_set.count()
+            trait_value_obj.rarity = round(trait_value_obj.count /
+                    project.max_supply * 100, 2)
+
+            base_score_multiplier = 4 / 5
+            trait_value_obj.score = round(
+                    1 / trait_value_obj.count / project.max_supply /
+                    len(all_trait_values) * (10 ** 9) * base_score_multiplier, 2)
+
             trait_value_obj.save()
-            print(f"Set {trait_value_obj} count to {trait_value_obj.count}.")
+            #  print(f"Set {trait_value_obj} count to {trait_value_obj.count}.")
 
 def calcRarestTraits(master_json, trait_counts):
     trait_percentages = initTraitTypes(master_json)
@@ -96,8 +106,6 @@ def calcTraitScore(trait_count, num_trait_values):
     # from rarity.tools article + trait normalization
     # https://raritytools.medium.com/ranking-rarity-understanding-rarity-calculation-methods-86ceaeb9b98c
     base_score_multiplier = 3 / 5
-    #  base_score = (1 / trait_count / constants.MAX_SUPPLY /
-            #  num_trait_values * (10 ** 9) * base_score_multiplier)
     base_score = round(1 / trait_count / constants.MAX_SUPPLY /
             num_trait_values * (10 ** 9) * base_score_multiplier, 2)
     return base_score
@@ -120,6 +128,13 @@ def calcTokenScore(master_json, trait_scores, token_num):
             token_score += \
                     trait_scores[attribute[constants.TRAIT_TYPE_KEY]][trait_value]
     return token_score
+
+def addTokenScores(project):
+    for token_obj in Token.objects.all():
+        token_obj.score = sum([trait_value_obj.score 
+            for trait_value_obj in token_obj.traits.all()])
+        token_obj.save()
+        print(f"Set {token_obj} score to {token_obj.score}.")
 
 def formatPercentage(percentage):
     return f"{percentage * 100:.2f}%"

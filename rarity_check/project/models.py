@@ -32,7 +32,7 @@ class TraitValue(models.Model):
     score = models.DecimalField(blank=True, null=True,
             max_digits=8, decimal_places=2)
     rarity = models.DecimalField(blank=True, null=True,
-            max_digits=3, decimal_places=2)
+            max_digits=4, decimal_places=2)
 
     class Meta:
         constraints = [models.UniqueConstraint(
@@ -47,7 +47,6 @@ class Token(models.Model):
             on_delete=models.CASCADE)
     number = models.IntegerField()
     image_url = models.URLField()
-    rank = models.IntegerField(blank=True, null=True)
     score = models.DecimalField(blank=True, null=True,
             max_digits=9, decimal_places=2)
     traits = models.ManyToManyField(TraitValue)
@@ -56,6 +55,7 @@ class Token(models.Model):
         constraints = [models.UniqueConstraint(
             name='unique_token',
             fields=['project', 'number'])]
+        ordering = ['-score']
 
     def __str__(self):
         return f"{self.project} #{self.number}"

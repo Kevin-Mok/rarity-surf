@@ -55,7 +55,7 @@ def get_image_url(image_url):
             if image_url.startswith("ipfs")
             else image_url)
 
-def get_token_obj(project, number, token_json):
+def get_token_obj(project, number, token_json=None):
     """Create or retrieve token object with project and number.
     """
     token_obj = Token.objects.filter(
@@ -63,12 +63,11 @@ def get_token_obj(project, number, token_json):
     if not token_obj.exists():
         token_obj = Token(project=project, number=number,
                 image_url=get_image_url(token_json["image"]))
+        for trait in token_json[constants.ATTRIBUTES_KEY]:
+            token_obj.traits.add(get_trait_objs(
+                project, trait)[1])
         token_obj.save()
         print(f"Added new token {token_obj}.")
     else:
         token_obj = token_obj[0]
-    for trait in token_json[constants.ATTRIBUTES_KEY]:
-        token_obj.traits.add(get_trait_objs(
-            project, trait)[1])
-    token_obj.save()
     return token_obj
