@@ -3,6 +3,7 @@ from django.db import models
 class Project(models.Model):
     contract_address = models.CharField(max_length=42)
     name = models.CharField(max_length=20, unique=True)
+    slug = models.CharField(max_length=20, unique=True)
     max_supply = models.IntegerField()
     ipfs_hash = models.CharField(max_length=46, blank=True)
     api_url = models.URLField(blank=True)

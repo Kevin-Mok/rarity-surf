@@ -1,12 +1,31 @@
 import project.cache as cache
 import project.constants as constants
 from project.models import Project, TraitType, TraitValue, Token
+from project.scrape import getTokenID 
 from project.web3_api import getIPFSHash
 
 from django.core.management.base import BaseCommand, CommandError
 from pprint import pprint
 
 IPFS_URL_PREFIX = "https://ipfs.io/ipfs"
+
+def get_project_obj(contract_address, project_name):
+    project_obj = Project.objects.filter(
+            contract_address=contract_address,
+            name=project_name)
+    if not project_obj.exists():
+        project_obj = Project(
+                contract_address=contract_address,
+                name=project_name,
+                slug=constants.PROJECT_SLUG,
+                max_supply=constants.MAX_SUPPLY,
+                ipfs_hash=constants.IPFS_HASH,
+                api_url=constants.API_URL)
+        project_obj.save()
+        print(f"Added new project {project_obj}.")
+    else:
+        project_obj = project_obj[0]
+    return project_obj
 
 def get_trait_type_obj(project, trait_type):
     """Create or retrieve trait_type_obj from project with
@@ -71,4 +90,30 @@ def get_token_obj(project, number, token_json=None):
         print(f"Added new token {token_obj}.")
     else:
         token_obj = token_obj[0]
+    return token_obj
+
+def get_token_obj_os(project, os_asset):
+    """Create or retrieve token object with OS asset JSON.
+    """
+    number = getTokenID(os_asset["name"])
+    token_obj = Token.objects.filter(
+            project=project, number=number)
+    if not token_obj.exists():
+        token_obj = Token(
+                project=project,
+                number=number,
+                os_url=os_asset["permalink"],
+                image_url=get_image_url(os_asset["image_url"]))
+        token_obj.save()
+        #  for trait in token_json[constants.ATTRIBUTES_KEY]:
+            #  token_obj.traits.add(get_trait_objs(
+                #  project, trait)[1])
+        #  token_obj.save()
+        print(f"Added new token {token_obj}.")
+    else:
+        token_obj = token_obj[0]
+    for trait in token_json[constants.ATTRIBUTES_KEY]:
+        token_obj.traits.add(get_trait_objs(
+            project, trait)[1])
+    token_obj.save()
     return token_obj

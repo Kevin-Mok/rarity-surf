@@ -1,5 +1,5 @@
-from cache import cache_json, read_json 
-from constants import TOOLS_RANKS_FILE
+from project.cache import cache_json, read_json 
+from project.constants import TOOLS_RANKS_FILE
 
 from pprint import pprint
 from selenium import webdriver

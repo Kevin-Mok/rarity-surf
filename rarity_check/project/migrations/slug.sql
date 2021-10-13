@@ -369,7 +369,8 @@ CREATE TABLE public.project_project (
     name character varying(20) NOT NULL,
     max_supply integer NOT NULL,
     ipfs_hash character varying(46) NOT NULL,
-    api_url character varying(200) NOT NULL
+    api_url character varying(200) NOT NULL,
+    slug character varying(20) NOT NULL
 );
 
 
@@ -774,6 +775,8 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 17	auth	0012_alter_user_first_name_max_length	2021-10-13 03:47:59.012089-04
 18	sessions	0001_initial	2021-10-13 03:47:59.025465-04
 19	project	0001_initial	2021-10-13 03:50:02.790278-04
+20	project	0002_project_slug	2021-10-13 04:36:10.572023-04
+21	project	0003_alter_project_slug	2021-10-13 04:49:22.971693-04
 \.
 
 
@@ -789,8 +792,9 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 -- Data for Name: project_project; Type: TABLE DATA; Schema: public; Owner: rarity_check
 --
 
-COPY public.project_project (id, contract_address, name, max_supply, ipfs_hash, api_url) FROM stdin;
-1	0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a	the-sevens	7000	QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU	
+COPY public.project_project (id, contract_address, name, max_supply, ipfs_hash, api_url, slug) FROM stdin;
+3	0x495f947276749ce646f68ac8c248420045cb7b5e	Bitz	975			bitz
+1	0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a	The Sevens	7000	QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU		the-sevens
 \.
 
 
@@ -7799,6 +7803,7 @@ COPY public.project_token (id, number, score, os_url, image_url, project_id) FRO
 399	398	90.48	https://opensea.io/assets/0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a/398/	https://ipfs.io/ipfs/Qmb7UpRkFyyBeWxcfg9Udg68TpiTnn2eFxy3eqEg9avmj8	1
 6970	6969	90.21	https://opensea.io/assets/0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a/6969/	https://ipfs.io/ipfs/QmZ9NVaSyeFKMgGgff4ok1tEPQVaoB1FGtTjS2XLAKF51B	1
 941	940	90.21	https://opensea.io/assets/0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a/940/	https://ipfs.io/ipfs/QmT9CMkNzwYsRVXtux97yYNT32orxqMWi9uaefummuwHBn	1
+7001	775	\N	https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/21424250214574860151985295016780488421893444491732158635922004478750774788097	https://lh3.googleusercontent.com/m_JzZ8fKGAnj2ucsL6flcSF2WgM7Du7Ckllcy_VIee-HAdv78-pLlZVs3j9Ry2qL1dxAGs7Ykgri0LZSZrpcWPAIvjwgsfdkJidMxiQ	3
 \.
 
 
@@ -78082,21 +78087,21 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rarity_check
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 19, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 21, true);
 
 
 --
 -- Name: project_project_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rarity_check
 --
 
-SELECT pg_catalog.setval('public.project_project_id_seq', 1, true);
+SELECT pg_catalog.setval('public.project_project_id_seq', 3, true);
 
 
 --
 -- Name: project_token_id_seq; Type: SEQUENCE SET; Schema: public; Owner: rarity_check
 --
 
-SELECT pg_catalog.setval('public.project_token_id_seq', 7000, true);
+SELECT pg_catalog.setval('public.project_token_id_seq', 7001, true);
 
 
 --
@@ -78273,6 +78278,14 @@ ALTER TABLE ONLY public.project_project
 
 
 --
+-- Name: project_project project_project_slug_080fdaf4_uniq; Type: CONSTRAINT; Schema: public; Owner: rarity_check
+--
+
+ALTER TABLE ONLY public.project_project
+    ADD CONSTRAINT project_project_slug_080fdaf4_uniq UNIQUE (slug);
+
+
+--
 -- Name: project_token project_token_pkey; Type: CONSTRAINT; Schema: public; Owner: rarity_check
 --
 
@@ -78440,6 +78453,13 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session U
 --
 
 CREATE INDEX project_project_name_8567a451_like ON public.project_project USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: project_project_slug_080fdaf4_like; Type: INDEX; Schema: public; Owner: rarity_check
+--
+
+CREATE INDEX project_project_slug_080fdaf4_like ON public.project_project USING btree (slug varchar_pattern_ops);
 
 
 --

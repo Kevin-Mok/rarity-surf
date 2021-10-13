@@ -1,6 +1,6 @@
 import project.cache as cache
 import project.constants as constants
-from project.get_obj import get_token_obj
+from project.get_obj import get_token_obj, get_token_obj_os
 from project.models import Project, TraitType, TraitValue, Token
 import project.opensea as opensea
 import project.rarity as rarity
@@ -14,9 +14,12 @@ class Command(BaseCommand):
         #  parser.add_argument('num_tokens', nargs=1, type=int)
 
     def handle(self, *args, **options):
+        project = Project.objects.get(
+                contract_address=constants.CONTRACT_ADDRESS)
+
         #  assets = opensea.getAssetsAPI(0)
         #  cache.cache_json(assets, constants.ASSETS_FILE)
-        #  raw_assets = cache.read_json(constants.ASSETS_RAW_FILE)
+        raw_assets = cache.read_json(constants.ASSETS_RAW_FILE)
         #  assets = []
         #  for raw_asset in raw_assets:
             #  """
@@ -32,8 +35,10 @@ class Command(BaseCommand):
                 #  "image_url": raw_asset[                "image_url"],
                 #  })
         #  pprint(assets)
+        token_obj = get_token_obj_os(project, raw_assets[0])
+        print(token_obj)
+        print(token_obj.os_url)
+        print(token_obj.image_url)
 
         # add token URL's
-        project = Project.objects.get(
-                contract_address=constants.CONTRACT_ADDRESS)
-        rarity.addTokenURLs(project)
+        #  rarity.addTokenURLs(project)
