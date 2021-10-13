@@ -1,6 +1,7 @@
 import project.cache as cache
 import project.constants as constants
-import project.get_obj as get_obj
+#  import project.get_obj as get_obj
+from project.get_obj import get_trait_objs, get_trait_type_obj, get_trait_value_obj
 from .models import Project, TraitType, TraitValue, Token
 import project.web3_api as web3_api
 
@@ -13,7 +14,8 @@ OS_ASSETS_URL = "https://opensea.io/assets"
 DISCREPANCY_KEY = "discrepancy"
 DISCREPANCY_PERCENTAGE_KEY = "discrepancy_percentage"
 NO_TRAIT_KEY = "no_trait"
-NUMBER_TRAITS_KEY = "number_traits"
+#  NUMBER_TRAITS_KEY = "number_traits"
+NUMBER_TRAITS_KEY = "Number Traits"
 TOOLS_RANK_KEY = "tools_rank"
 #  TRAIT_TYPE_KEY = "trait_type"
 #  TRAIT_VALUE_KEY = "value"
@@ -39,6 +41,23 @@ def addNumberTraits(master_json):
                 constants.TRAIT_VALUE_KEY: num_traits,
                 }
         token_json[constants.ATTRIBUTES_KEY].append(number_traits_attribute)
+
+def checkIfNumTraitsAdded(project, num_traits_type, token_traits):
+    for token_trait in token_traits:
+        if token_trait.trait_type == num_traits_type:
+            return True
+    return False
+
+#  def addNumberTraitsDB(project, token_obj):
+def addNumberTraitsDB(project):
+    for token_obj in Token.objects.filter(project=project):
+        token_traits = token_obj.traits.all()
+        num_traits_type = get_trait_type_obj(project, NUMBER_TRAITS_KEY)
+        if not checkIfNumTraitsAdded(project, num_traits_type, token_traits):
+            num_traits_value = get_trait_value_obj(num_traits_type,
+                    token_traits.count())
+            token_obj.traits.add(num_traits_value)
+            print(f"Added {num_traits_value} to {token_obj}.")
 
 def initTraitTypes(master_json):
     trait_counts = { NUMBER_TRAITS_KEY: {} }
