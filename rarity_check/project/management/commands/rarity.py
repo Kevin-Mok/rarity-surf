@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         project = Project.objects.get(
                 contract_address=constants.CONTRACT_ADDRESS)
-        #  rarity.addTraitValueStats(project)
+        rarity.addTraitValueStats(project)
         #  rarity.addTokenScores(project)
         #  for token_obj in Token.objects.all()[:7]:
             #  print(token_obj.number, token_obj.score)

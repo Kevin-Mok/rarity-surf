@@ -47,8 +47,10 @@ def getAssetsAPI(offset):
             "limit": ASSETS_MAX_LIMIT}
     api_request = requests.request("GET", ASSETS_API,
             headers=API_HEADERS, params=querystring)
-    #  pprint(api_request)
-    return json.loads(api_request.text)["assets"]
+    assets = json.loads(api_request.text)["assets"]
+    #  pprint(assets)
+    return assets
+    #  return json.loads(api_request.text)["assets"]
 
 def getSalesData(page):
     print(f"Fetching page {page} of events.")
@@ -156,6 +158,10 @@ def getAllAssets(token_ids):
     return master_assets
 
 def inputAllAssets(project):
+    #  for i in range(775, project.max_supply, ASSETS_MAX_LIMIT):
+    #  for i in range(775, 805, ASSETS_MAX_LIMIT):
+        #  token_ids = range(i, i + ASSETS_MAX_LIMIT)
+        #  for asset in getAssetsAPI(token_ids):
     for offset in range(0, project.max_supply, ASSETS_MAX_LIMIT):
         for asset in getAssetsAPI(offset):
             token_obj = get_token_obj_os(project, asset)

@@ -19,5 +19,10 @@ class Command(BaseCommand):
         #  opensea.inputAllAssets(project)
         print(Token.objects.filter(project=project).count())
 
+        #  assets = cache.read_json(constants.ASSETS_RAW_FILE)
+        #  #  for asset in assets[:1]:
+        #  for asset in assets:
+            #  print(get_token_obj_os(project, asset))
+
         # add token URL's
         #  rarity.addTokenURLs(project)

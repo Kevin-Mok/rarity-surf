@@ -50,9 +50,24 @@ class TraitValue(models.Model):
     def __str__(self):
         return f"{self.name} [ {self.trait_type} ]"
 
+class TokenType(models.Model):
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
+    name = models.CharField(max_length=20)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(
+            name='unique_token_type',
+            fields=['project', 'name'])]
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Token(models.Model):
     project = models.ForeignKey('Project',
             on_delete=models.CASCADE)
+    token_type = models.ForeignKey('TokenType',
+            on_delete=models.CASCADE,
+            blank=True, null=True)
     number = models.IntegerField()
     traits = models.ManyToManyField(TraitValue)
     score = models.DecimalField(blank=True, null=True,
@@ -63,8 +78,8 @@ class Token(models.Model):
     class Meta:
         constraints = [models.UniqueConstraint(
             name='unique_token',
-            fields=['project', 'number'])]
+            fields=['project', 'token_type', 'number'])]
         ordering = ['-score']
 
     def __str__(self):
-        return f"{self.project} #{self.number}"
+        return f"{self.token_type} #{self.number} ({self.project})"

@@ -1,6 +1,6 @@
 import project.cache as cache
 import project.constants as constants
-from project.models import Project, TraitType, TraitValue, Token
+from project.models import Project, TraitType, TraitValue, TokenType, Token
 from project.scrape import getTokenID 
 from project.web3_api import getIPFSHash
 
@@ -91,15 +91,40 @@ def get_token_obj(project, number, token_json=None):
         token_obj = token_obj[0]
     return token_obj
 
+def get_token_name_parts(token_name):
+    """Return token type/number from name.
+    """
+    name_parts = token_name.split("#")
+    return name_parts[0].strip(), name_parts[1]
+
+def get_token_type_obj(project, token_type):
+    """Create or retrieve token type object.
+    """
+    token_type_obj = TokenType.objects.filter(
+            project=project, name=token_type)
+    if not token_type_obj.exists():
+        token_type_obj = TokenType(project=project,
+                name=token_type)
+        token_type_obj.save()
+        print(f"Added new token type {token_type_obj}.")
+    else:
+        token_type_obj = token_type_obj[0]
+    return token_type_obj
+
 def get_token_obj_os(project, os_asset):
     """Create or retrieve token object with OS asset JSON.
     """
-    number = getTokenID(os_asset["name"])
+    token_type, number = get_token_name_parts(os_asset["name"])
+    token_type_obj = get_token_type_obj(project, token_type)
+
     token_obj = Token.objects.filter(
-            project=project, number=number)
+            project=project, 
+            token_type=token_type_obj, 
+            number=number)
     if not token_obj.exists():
         token_obj = Token(
                 project=project,
+                token_type=token_type_obj, 
                 number=number,
                 os_url=os_asset["permalink"],
                 image_url=get_image_url(os_asset["image_url"]))
