@@ -7,9 +7,13 @@ from pprint import pprint
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        project = Project.objects.get(
-                contract_address=constants.CONTRACT_ADDRESS)
-        rarity.addTraitValueStats(project)
+        #  project = Project.objects.get(
+                #  contract_address=constants.CONTRACT_ADDRESS)
+        #  project = Project.objects.get(name="The Sevens")
+        project = Project.objects.get(name="Bitz")
+        #  rarity.addTraitValueStats(project)
         #  rarity.addTokenScores(project)
-        #  for token_obj in Token.objects.all()[:7]:
+        for token_obj in Token.objects.filter(project=project)[:7]:
             #  print(token_obj.number, token_obj.score)
+            print(token_obj)
+            #  print(token_obj.token_type)

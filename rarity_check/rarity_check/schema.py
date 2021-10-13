@@ -3,10 +3,16 @@ from graphene_django import DjangoObjectType
 
 from project.models import Project, TraitType, TraitValue, Token
 
+class TokenTypeType(DjangoObjectType):
+    class Meta:
+        model = Token
+        fields = ("name",)
+
 class TokenType(DjangoObjectType):
     class Meta:
         model = Token
-        fields = ("number", "image_url", "score", "traits")
+        fields = ("token_type", "number", "image_url",
+                "score", "traits")
 
 class TraitValueType(DjangoObjectType):
     class Meta:

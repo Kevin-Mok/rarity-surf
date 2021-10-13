@@ -129,7 +129,8 @@ def calcTokenScore(master_json, trait_scores, token_num):
     return token_score
 
 def addTokenScores(project):
-    for token_obj in Token.objects.all():
+    #  for token_obj in Token.objects.all():
+    for token_obj in Token.objects.filter(project=project):
         token_obj.score = sum([trait_value_obj.score 
             for trait_value_obj in token_obj.traits.all()])
         token_obj.save()

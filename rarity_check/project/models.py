@@ -82,4 +82,7 @@ class Token(models.Model):
         ordering = ['-score']
 
     def __str__(self):
-        return f"{self.token_type} #{self.number} ({self.project})"
+        no_type = f"{self.project} #{self.number}"
+        has_type = f"{self.token_type} #{self.number} ({self.project})"
+        return no_type if self.token_type is None else has_type
+        #  return f"{self.token_type} #{self.number} ({self.project})"
