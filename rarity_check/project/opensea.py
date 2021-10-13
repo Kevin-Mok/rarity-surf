@@ -1,5 +1,5 @@
-import cache
-import constants
+import project.cache as cache
+import project.constants as constants
 
 from datetime import datetime
 from dateutil import tz
@@ -20,7 +20,8 @@ API_HEADERS = {"Accept": "application/json"}
 #  MAX_LIMIT = 300
 EVENT_TYPE = "created" # listings
 MAX_LIMIT = 50
-ASSETS_MAX_LIMIT = 30
+#  ASSETS_MAX_LIMIT = 30
+ASSETS_MAX_LIMIT = 2
 LISTINGS_MAX_LIMIT = 50
 
 #  MAX_LIMIT = 5 # tesing
@@ -34,10 +35,13 @@ THROTTLED_MSG = "Request was throttled."
 TIMESTAMP_KEY = "timestamp"
 ETH_KEY = "eth"
 
-def getAssetsAPI(token_id_list):
+#  def getAssetsAPI(token_id_list):
+def getAssetsAPI(offset):
     querystring = {
-            "asset_contract_address": constants.CONTRACT_ADDRESS,
-            "token_ids": token_id_list,
+            #  "asset_contract_address": constants.CONTRACT_ADDRESS,
+            #  "token_ids": token_id_list,
+            "collection": "bitznft",
+            "offset": offset,
             #  "order_by": "listing_date",
             "limit": ASSETS_MAX_LIMIT}
     api_request = requests.request("GET", ASSETS_API,

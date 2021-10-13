@@ -12,11 +12,10 @@ BASE_CACHE_DIR = "/home/kevin/coding/rarity-sniper/rarity_check/project/data"
 
 #  {{{ 7s # 
 
-#  CACHE_DIR = "./data/sevens"
-CACHE_DIR = f"{BASE_CACHE_DIR}/sevens"
-CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
-IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
-MAX_SUPPLY = 7000
+#  CACHE_DIR = f"{BASE_CACHE_DIR}/sevens"
+#  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
+#  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
+#  MAX_SUPPLY = 7000
 
 #  }}} 7s # 
 
@@ -32,6 +31,14 @@ MAX_SUPPLY = 7000
 #  RANK_FILTER = 1000
 
 #  }}} bears # 
+
+#  {{{ bitz # 
+
+CACHE_DIR = f"{BASE_CACHE_DIR}/bitz"
+CONTRACT_ADDRESS = '0x495f947276749ce646f68ac8c248420045cb7b5e'
+MAX_SUPPLY = 975
+
+#  }}} bitz # 
 
 #  {{{ bunker beasts # 
 
@@ -154,6 +161,7 @@ RAW_CACHE_DIR = f"{CACHE_DIR}/raw"
 
 # file names
 ASSETS_FILE = f"{CACHE_DIR}/assets.json"
+ASSETS_RAW_FILE = f"{CACHE_DIR}/assets-raw.json"
 DISCREPANCIES_FILE = f"{CACHE_DIR}/discrepancies.json"
 LISTINGS_FILE = f"{CACHE_DIR}/listings.json"
 FILTERED_LISTINGS_FILE = f"{CACHE_DIR}/filtered-listings.json"
@@ -165,4 +173,5 @@ SORTED_RANKS_FILE = f"{CACHE_DIR}/sorted-ranks.json"
 TRAIT_COUNTS_FILE = f"{CACHE_DIR}/trait-counts.json"
 TOOLS_RANKS_FILE = f"{CACHE_DIR}/tools-ranks.json"
 
-OPENSEA_API_KEY = "2f6f419a083c46de9d83ce3dbe7db601"
+#  OPENSEA_API_KEY = "2f6f419a083c46de9d83ce3dbe7db601"
+OPENSEA_API_KEY = "89356aa2da5947bba783c26f6b6337fb"

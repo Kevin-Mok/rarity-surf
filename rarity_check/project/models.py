@@ -8,6 +8,9 @@ class Project(models.Model):
     ipfs_hash = models.CharField(max_length=46, blank=True, unique=True)
     api_url = models.URLField(blank=True, unique=True)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return self.name
 
@@ -20,6 +23,7 @@ class TraitType(models.Model):
         constraints = [models.UniqueConstraint(
             name='unique_trait_type',
             fields=['project', 'name'])]
+        ordering = ['name']
 
     def __str__(self):
         return f"{self.name} ({self.project})"
@@ -38,6 +42,7 @@ class TraitValue(models.Model):
         constraints = [models.UniqueConstraint(
             name='unique_trait_value',
             fields=['trait_type', 'name'])]
+        ordering = ['rarity']
 
     def __str__(self):
         return f"{self.name} [ {self.trait_type} ]"

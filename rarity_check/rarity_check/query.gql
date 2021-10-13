@@ -1,4 +1,19 @@
 query {
+  tokenByNumber(number: 0) {
+    number
+    imageUrl
+    traits {
+      traitType {
+        name
+      }
+      name
+      rarity
+    }
+    score
+  }
+}
+
+query {
   allTokens {
     number
     imageUrl
