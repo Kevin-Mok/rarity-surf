@@ -145,7 +145,7 @@ def addTokenRanks(project):
         #  print(token_obj.score)
 
 def addTokenURLs(project):
-    for token_obj in Token.objects.all():
+    for token_obj in Token.objects.filter(project=project):
         token_obj.os_url = f"{OS_ASSETS_URL}/" + \
                 f"{project.contract_address}/" + \
                 f"{token_obj.number}/"
@@ -260,13 +260,34 @@ def getAvgDiscrepancies(max_rank=constants.MAX_SUPPLY):
     print(f"Avg. Discrepancy: {mean(all_discrepancies)}")
     print(f"Avg. Discrepancy %: {avg_discrepancy_percentage:2f}")
 
+def getAvgDiscrepanciesDB(project):
+    all_discrepancies = []
+    all_discrepancy_percentages = []
+    for token_obj in Token.objects.filter(project=project):
+        discrepancy = abs(token_obj.tools_rank - token_obj.rank)
+        all_discrepancies.append(discrepancy)
+        all_discrepancy_percentages.append(
+                discrepancy / token_obj.tools_rank)
+    avg_discrepancy_percentage = mean(all_discrepancy_percentages) * 100
+    print(f"Avg. Discrepancy: {mean(all_discrepancies)}")
+    print(f"Avg. Discrepancy %: {avg_discrepancy_percentage:2f}")
+
 def convertToolsRanks():
     """Convert rarity.tools ranks to by token ID.
     """
     tools_ranks = cache.read_json(constants.TOOLS_RANKS_FILE)
-    return {token_id.lstrip("0"): rank for (rank, token_id) 
+    #  return {token_id.lstrip("0"): rank for (rank, token_id)
+    return {token_id: rank for (rank, token_id) 
             in tools_ranks.items()}
     
+def addToolsRanks(project):
+    tools_ranks = convertToolsRanks()
+    for token_obj in Token.objects.filter(project=project):
+        tools_rank = tools_ranks[str(token_obj.number)]
+        token_obj.tools_rank = tools_rank
+        token_obj.save()
+        print(f"Set {token_obj} tools rank to {tools_rank}.")
+
 if __name__ == "__main__":
     #  interactiveRankSearch()
     #  getAvgDiscrepancies(250)

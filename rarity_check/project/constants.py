@@ -12,12 +12,12 @@ BASE_CACHE_DIR = "/home/kevin/coding/rarity-sniper/rarity_check/project/data"
 
 #  {{{ 7s # 
 
-#  CACHE_DIR = f"{BASE_CACHE_DIR}/sevens"
-#  CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
-#  IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
-#  PROJECT_NAME = "The Sevens"
-#  PROJECT_SLUG = "the-sevens"
-#  MAX_SUPPLY = 7000
+CACHE_DIR = f"{BASE_CACHE_DIR}/sevens"
+CONTRACT_ADDRESS = '0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a'
+IPFS_HASH = "QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU"
+PROJECT_NAME = "The Sevens"
+PROJECT_SLUG = "the-sevens"
+MAX_SUPPLY = 7000
 
 #  }}} 7s # 
 
@@ -36,13 +36,13 @@ BASE_CACHE_DIR = "/home/kevin/coding/rarity-sniper/rarity_check/project/data"
 
 #  {{{ bitz # 
 
-CACHE_DIR = f"{BASE_CACHE_DIR}/bitz"
-CONTRACT_ADDRESS = '0x495f947276749ce646f68ac8c248420045cb7b5e'
-IPFS_HASH = ""
-API_URL = ""
-PROJECT_NAME = "Bitz"
-PROJECT_SLUG = "bitz"
-MAX_SUPPLY = 975
+#  CACHE_DIR = f"{BASE_CACHE_DIR}/bitz"
+#  CONTRACT_ADDRESS = '0x495f947276749ce646f68ac8c248420045cb7b5e'
+#  IPFS_HASH = ""
+#  API_URL = ""
+#  PROJECT_NAME = "Bitz"
+#  PROJECT_SLUG = "bitz"
+#  MAX_SUPPLY = 975
 
 #  }}} bitz # 
 

@@ -70,6 +70,7 @@ class Token(models.Model):
             blank=True, null=True)
     number = models.IntegerField()
     rank = models.IntegerField(blank=True, null=True)
+    tools_rank = models.IntegerField(blank=True, null=True)
     traits = models.ManyToManyField(TraitValue)
     score = models.DecimalField(blank=True, null=True,
             max_digits=9, decimal_places=2)
