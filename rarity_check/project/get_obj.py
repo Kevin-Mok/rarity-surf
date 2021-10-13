@@ -63,6 +63,7 @@ def get_token_obj(project, number, token_json=None):
     if not token_obj.exists():
         token_obj = Token(project=project, number=number,
                 image_url=get_image_url(token_json["image"]))
+        token_obj.save()
         for trait in token_json[constants.ATTRIBUTES_KEY]:
             token_obj.traits.add(get_trait_objs(
                 project, trait)[1])

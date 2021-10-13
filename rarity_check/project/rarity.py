@@ -80,7 +80,6 @@ def getTraitCounts(master_json):
 def addTraitValueStats(project):
     for trait_type_obj in project.traittype_set.all():
         all_trait_values = trait_type_obj.traitvalue_set.all()
-        #  print(trait_type_obj, len(all_trait_values))
         for trait_value_obj in all_trait_values:
             trait_value_obj.count = trait_value_obj.token_set.count()
             trait_value_obj.rarity = round(trait_value_obj.count /
@@ -92,7 +91,7 @@ def addTraitValueStats(project):
                     len(all_trait_values) * (10 ** 9) * base_score_multiplier, 2)
 
             trait_value_obj.save()
-            #  print(f"Set {trait_value_obj} count to {trait_value_obj.count}.")
+            print(f"Set {trait_value_obj} count, rarity and score.")
 
 def calcRarestTraits(master_json, trait_counts):
     trait_percentages = initTraitTypes(master_json)

@@ -1,7 +1,6 @@
 from django.db import models
 
 class Project(models.Model):
-    id = models.BigAutoField(primary_key=True)
     contract_address = models.CharField(max_length=42)
     name = models.CharField(max_length=20, unique=True)
     max_supply = models.IntegerField()
@@ -9,6 +8,9 @@ class Project(models.Model):
     api_url = models.URLField(blank=True)
 
     class Meta:
+        constraints = [models.UniqueConstraint(
+            name='unique_project',
+            fields=['contract_address', 'name'])]
         ordering = ['name']
 
     def __str__(self):
