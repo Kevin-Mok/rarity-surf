@@ -55,6 +55,7 @@ class Token(models.Model):
     score = models.DecimalField(blank=True, null=True,
             max_digits=9, decimal_places=2)
     traits = models.ManyToManyField(TraitValue)
+    os_url = models.URLField()
 
     class Meta:
         constraints = [models.UniqueConstraint(

@@ -136,6 +136,14 @@ def addTokenScores(project):
         token_obj.save()
         print(f"Set {token_obj} score to {token_obj.score}.")
 
+def addTokenURLs(project):
+    for token_obj in Token.objects.all():
+        token_obj.os_url = f"{OS_ASSETS_URL}/" + \
+                f"{project.contract_address}/" + \
+                f"{token_obj.number}/"
+        token_obj.save()
+        print(f"Set {token_obj} URL to {token_obj.os_url}.")
+
 def formatPercentage(percentage):
     return f"{percentage * 100:.2f}%"
 

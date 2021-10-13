@@ -11,6 +11,5 @@ class Command(BaseCommand):
                 contract_address=constants.CONTRACT_ADDRESS)
         #  rarity.addTraitValueStats(project)
         #  rarity.addTokenScores(project)
-        #  pprint(Token.objects.all()[:7])
-        for token_obj in Token.objects.all()[:7]:
-            print(token_obj.number, token_obj.score)
+        #  for token_obj in Token.objects.all()[:7]:
+            #  print(token_obj.number, token_obj.score)
