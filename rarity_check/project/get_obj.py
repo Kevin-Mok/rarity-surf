@@ -86,7 +86,6 @@ def get_token_obj(project, number, token_json=None):
         for trait in token_json[constants.ATTRIBUTES_KEY]:
             token_obj.traits.add(get_trait_objs(
                 project, trait)[1])
-        token_obj.save()
         print(f"Added new token {token_obj}.")
     else:
         token_obj = token_obj[0]
@@ -105,15 +104,10 @@ def get_token_obj_os(project, os_asset):
                 os_url=os_asset["permalink"],
                 image_url=get_image_url(os_asset["image_url"]))
         token_obj.save()
-        #  for trait in token_json[constants.ATTRIBUTES_KEY]:
-            #  token_obj.traits.add(get_trait_objs(
-                #  project, trait)[1])
-        #  token_obj.save()
+        for trait in os_asset["traits"]:
+            token_obj.traits.add(get_trait_objs(
+                project, trait)[1])
         print(f"Added new token {token_obj}.")
     else:
         token_obj = token_obj[0]
-    for trait in token_json[constants.ATTRIBUTES_KEY]:
-        token_obj.traits.add(get_trait_objs(
-            project, trait)[1])
-    token_obj.save()
     return token_obj

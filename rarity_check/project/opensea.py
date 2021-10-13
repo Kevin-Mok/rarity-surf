@@ -1,5 +1,6 @@
 import project.cache as cache
 import project.constants as constants
+from project.get_obj import get_token_obj_os
 
 from datetime import datetime
 from dateutil import tz
@@ -20,8 +21,8 @@ API_HEADERS = {"Accept": "application/json"}
 #  MAX_LIMIT = 300
 EVENT_TYPE = "created" # listings
 MAX_LIMIT = 50
-#  ASSETS_MAX_LIMIT = 30
-ASSETS_MAX_LIMIT = 2
+ASSETS_MAX_LIMIT = 30
+#  ASSETS_MAX_LIMIT = 2
 LISTINGS_MAX_LIMIT = 50
 
 #  MAX_LIMIT = 5 # tesing
@@ -153,6 +154,13 @@ def getAllAssets(token_ids):
     for i in range(0, len(token_ids), ASSETS_MAX_LIMIT):
         master_assets += getAssetsAPI(token_ids[i:i + ASSETS_MAX_LIMIT])
     return master_assets
+
+def inputAllAssets(project):
+    for offset in range(0, project.max_supply, ASSETS_MAX_LIMIT):
+        for asset in getAssetsAPI(offset):
+            token_obj = get_token_obj_os(project, asset)
+            print(f"{token_obj} Traits:")
+            print(token_obj.traits.all())
 
 def checkIfStillListed(listings):
     assets = getAllAssets(list(listings.keys()))
