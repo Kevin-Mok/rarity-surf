@@ -11,10 +11,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         project = Project(
-                contract_address='0xf497253c2bb7644ebb99e4d9ecc104ae7a79187a',
-                name='the-sevens',
-                max_supply=7000,
-                ipfs_hash='QmRE9x8qTTRtvS3UxDtzMCVV9GJKBfD8TgUoym1ePireGU',
+                contract_address='0x495f947276749ce646f68ac8c248420045cb7b5e',
+                name='bitz',
+                max_supply=975,
+                ipfs_hash='',
                 api_url='',
                 )
         project.save()

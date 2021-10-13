@@ -1,12 +1,12 @@
 from django.db import models
 
 class Project(models.Model):
-    contract_address = models.CharField(max_length=42,
-            primary_key=True)
+    id = models.BigAutoField(primary_key=True)
+    contract_address = models.CharField(max_length=42)
     name = models.CharField(max_length=20, unique=True)
     max_supply = models.IntegerField()
-    ipfs_hash = models.CharField(max_length=46, blank=True, unique=True)
-    api_url = models.URLField(blank=True, unique=True)
+    ipfs_hash = models.CharField(max_length=46, blank=True)
+    api_url = models.URLField(blank=True)
 
     class Meta:
         ordering = ['name']
@@ -32,11 +32,11 @@ class TraitValue(models.Model):
     trait_type = models.ForeignKey('TraitType',
             on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    count = models.IntegerField(blank=True, null=True)
-    score = models.DecimalField(blank=True, null=True,
-            max_digits=8, decimal_places=2)
     rarity = models.DecimalField(blank=True, null=True,
             max_digits=4, decimal_places=2)
+    score = models.DecimalField(blank=True, null=True,
+            max_digits=8, decimal_places=2)
+    count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(
@@ -51,11 +51,11 @@ class Token(models.Model):
     project = models.ForeignKey('Project',
             on_delete=models.CASCADE)
     number = models.IntegerField()
-    image_url = models.URLField()
+    traits = models.ManyToManyField(TraitValue)
     score = models.DecimalField(blank=True, null=True,
             max_digits=9, decimal_places=2)
-    traits = models.ManyToManyField(TraitValue)
     os_url = models.URLField()
+    image_url = models.URLField()
 
     class Meta:
         constraints = [models.UniqueConstraint(
