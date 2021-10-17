@@ -7,6 +7,12 @@ from django.core.management.base import BaseCommand, CommandError
 from pprint import pprint
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('-t', '--type',
+                type=str, help='Token type to check')
+        parser.add_argument('-n', '--number', type=int,
+                help='Token number to check')
+
     def handle(self, *args, **options):
         #  project = Project.objects.get(
                 #  contract_address=constants.CONTRACT_ADDRESS)
@@ -32,13 +38,15 @@ class Command(BaseCommand):
             #  print(f"{token_obj.rank}. #{token_obj.number} {token_obj.score}")
 
         # check token rank
-        token_type = get_token_type_obj(project, "Pigz")
+        #  token_type = get_token_type_obj(project, "Bitz")
+        token_type = get_token_type_obj(project,
+                options["type"])
+        #  print(token_type)
         token_obj = Token.objects.get(project=project,
-                #  num traits added
-                token_type=token_type, number=34)
-                #  num traits not added
-                #  token_type=token_type, number=)
-        #  print(token.rank)
+                #  token_type=token_type, number=7)
+                token_type=token_type,
+                number=options["number"])
+        print(token_obj.rank)
 
         # check Bitz rank
         #  bitz_trait = get_token_type_obj(project, "Bitz")
