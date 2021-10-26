@@ -32,7 +32,7 @@ query {
 }
 
 query {
-  tokenByNumber(number: 0) {
+  tokenByNumber(projName: "The Sevens", number: 1) {
     number
     imageUrl
     traits {
