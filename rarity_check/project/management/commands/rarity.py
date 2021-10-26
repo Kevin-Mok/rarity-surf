@@ -16,8 +16,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         #  project = Project.objects.get(
                 #  contract_address=constants.CONTRACT_ADDRESS)
-        #  project = Project.objects.get(name="The Sevens")
-        project = Project.objects.get(name="Bitz")
+        project = Project.objects.get(name="The Sevens")
+        #  project = Project.objects.get(name="Bitz")
 
         # update score stats
         # add number traits
@@ -26,11 +26,11 @@ class Command(BaseCommand):
         #  rarity.addNumberTraitsDB(project, token_obj)
         #  rarity.addNumberTraitsDB(project)
 
-        #  rarity.addTraitValueStats(project)
-        #  rarity.addTokenScores(project)
-        #  rarity.addTokenRanks(project)
-        #  rarity.addToolsRanks(project)
-        #  rarity.getAvgDiscrepanciesDB(project)
+        rarity.addTraitValueStats(project)
+        rarity.addTokenScores(project)
+        rarity.addTokenRanks(project)
+        rarity.addToolsRanks(project)
+        rarity.getAvgDiscrepanciesDB(project)
 
         # check highest ranks
         #  for token_obj in Token.objects.filter(
@@ -39,14 +39,14 @@ class Command(BaseCommand):
 
         # check token rank
         #  token_type = get_token_type_obj(project, "Bitz")
-        token_type = get_token_type_obj(project,
-                options["type"])
-        #  print(token_type)
-        token_obj = Token.objects.get(project=project,
-                #  token_type=token_type, number=7)
-                token_type=token_type,
-                number=options["number"])
-        print(token_obj.rank)
+        #  token_type = get_token_type_obj(project,
+                #  options["type"])
+        #  #  print(token_type)
+        #  token_obj = Token.objects.get(project=project,
+                #  #  token_type=token_type, number=7)
+                #  token_type=token_type,
+                #  number=options["number"])
+        #  print(token_obj.rank)
 
         # check Bitz rank
         #  bitz_trait = get_token_type_obj(project, "Bitz")

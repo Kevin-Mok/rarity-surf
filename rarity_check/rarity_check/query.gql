@@ -1,4 +1,37 @@
 query {
+  tokensByRanks(projName: "Bitz", startRank: 10, endRank: 20) {
+    tokenType {
+      name
+    }
+    number
+    imageUrl
+    traits {
+      traitType {
+        name
+      }
+      name
+      rarity
+    }
+    score
+  }
+}
+
+query {
+  allProjTokens(projName: "Bitz") {
+    number
+    imageUrl
+    traits {
+      traitType {
+        name
+      }
+      name
+      rarity
+    }
+    score
+  }
+}
+
+query {
   tokenByNumber(number: 0) {
     number
     imageUrl
