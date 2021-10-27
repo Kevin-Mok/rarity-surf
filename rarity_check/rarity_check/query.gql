@@ -1,5 +1,5 @@
 query {
-  tokensByRanks(projName: "Bitz", startRank: 10, endRank: 20) {
+  tokensByRanks(projSlug: "bitz", startRank: 10, endRank: 20) {
     tokenType {
       name
     }
@@ -32,7 +32,7 @@ query {
 }
 
 query {
-  tokenByNumber(projName: "The Sevens", number: 1) {
+  tokenByNumber(projSlug: "the-sevens", number: 1) {
     number
     imageUrl
     traits {

@@ -29,10 +29,10 @@ class Query(graphene.ObjectType):
     all_proj_tokens = graphene.List(TokenType,
             proj_name=graphene.String(required=True))
     token_by_number = graphene.Field(TokenType,
-            proj_name=graphene.String(required=True),
+            proj_slug=graphene.String(required=True),
             number=graphene.Int(required=True))
     tokens_by_ranks = graphene.List(TokenType,
-            proj_name=graphene.String(required=True),
+            proj_slug=graphene.String(required=True),
             start_rank=graphene.Int(required=True),
             end_rank=graphene.Int(required=True))
 
@@ -46,17 +46,17 @@ class Query(graphene.ObjectType):
         except Project.DoesNotExist:
             return None
 
-    def resolve_token_by_number(root, info, proj_name, number):
+    def resolve_token_by_number(root, info, proj_slug, number):
         try:
-            proj_obj = Project.objects.get(name=proj_name)
+            proj_obj = Project.objects.get(slug=proj_slug)
             return Token.objects.get(project=proj_obj, number=number)
         except (Project.DoesNotExist, Token.DoesNotExist) as e:
             return None
 
-    def resolve_tokens_by_ranks(root, info, proj_name,
+    def resolve_tokens_by_ranks(root, info, proj_slug,
             start_rank, end_rank):
         try:
-            proj_obj = Project.objects.get(name=proj_name)
+            proj_obj = Project.objects.get(slug=proj_slug)
             return Token.objects.filter(
                     project=proj_obj)[start_rank - 1:end_rank]
         except Project.DoesNotExist:
