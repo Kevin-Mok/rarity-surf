@@ -57,6 +57,17 @@
   - tweet about
 - discounted beta access
 - survey for user feedback
+- Discord "Inspector" roles
+  - initially Inspector for everyone
+    - In Training when paid
+  - hierarchy
+    - jobs
+      - Junior
+      - Inspector
+      - Senior
+      - Elite
+      - Master
+      - Legendary
 
 ## FAQ
 - comparison with other tools
@@ -71,6 +82,8 @@
 
 # Naming
 - Rarity Check
+  - raritycheck.art
+  - raritycheck.app
   - raritycheck.ai
   - raritycheck.org
   - try magnifying glass logo

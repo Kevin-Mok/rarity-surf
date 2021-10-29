@@ -32,15 +32,20 @@ query {
 }
 
 query {
-  tokenByNumber(projSlug: "the-sevens", number: 1) {
+  tokenByNumber(projSlug: "bitz", number: 100) {
+    tokenType {
+      name
+    }
     number
     imageUrl
+    rank
     traits {
       traitType {
         name
       }
       name
       rarity
+      score
     }
     score
   }
