@@ -100,3 +100,8 @@
   - email = admin@raritywat.ch
   - Discord = Rarity Watch
   - Twitter = Rarity Watch
+- Rarity Surf
+  - email
+    - raritysurf@gmail.com
+    - raritysurf@airmail.cc
+    - admin@rarity.surf
